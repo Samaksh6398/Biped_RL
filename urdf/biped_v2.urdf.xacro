@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro"
+  name="biped_v2">
+  <!-- WORLD -->
+  <link name="world_"/>
+
+  <!-- BASE LINK -->
+  <joint name="base_joint" type="fixed">
+    <parent link="world_"/>
+    <child link="base_link"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 1.0"/>
+  </joint>
+
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-2.2803E-11 -4.7208E-05 -0.024799"
+        rpy="0 0 0" />
+      <mass
+        value="0.365" />
+      <inertia
+        ixx="6.2351E-05"
+        ixy="2.808E-13"
+        ixz="7.4451E-14"
+        iyy="0.00010147"
+        iyz="5.9841E-08"
+        izz="0.00012028" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find robot_bringup)/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.94 0.76 0.22 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find robot_bringup)/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="left_femur1">
+    <inertial>
+      <origin
+        xyz="-8.4315E-05 -0.041005 -0.027483"
+        rpy="0 0 0" />
+      <mass
+        value="0.11" />
+      <inertia
+        ixx="1.4138E-05"
+        ixy="-8.8103E-15"
+        ixz="-2.2331E-07"
+        iyy="1.493E-05"
+        iyz="4.2668E-09"
+        izz="7.8227E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find robot_bringup)/meshes/left_femur1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find robot_bringup)/meshes/left_femur1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_hip1"
+    type="revolute">
+    <origin
+      xyz="-0.14175 -0.0234 -0.04575"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="left_femur1" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2"
+      upper="2"
+      effort="3"
+      velocity="10" />
+  </joint>
+  <link
+    name="left_femur2">
+    <inertial>
+      <origin
+        xyz="-1.1102E-16 0.1345 -0.0254"
+        rpy="0 0 0" />
+      <mass
+        value="0.05" />
+      <inertia
+        ixx="2.5129E-05"
+        ixy="4.6132E-15"
+        ixz="-6.3691E-21"
+        iyy="7.512E-06"
+        iyz="-2.2221E-20"
+        izz="1.9154E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find robot_bringup)/meshes/left_femur2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.1 0.2 0.8 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find robot_bringup)/meshes/left_femur2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_hip2"
+    type="revolute">
+    <origin
+      xyz="-0.0234 -0.04475 -0.0394"
+      rpy="3.1416 1.5708 0" />
+    <parent
+      link="left_femur1" />
+    <child
+      link="left_femur2" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2"
+      upper="2"
+      effort="3"
+      velocity="10" />
+  </joint>
+  <link
+    name="left_tibia">
+    <inertial>
+      <origin
+        xyz="8.5983E-07 0.094337 -0.023388"
+        rpy="0 0 0" />
+      <mass
+        value="0.15" />
+      <inertia
+        ixx="3.0605E-05"
+        ixy="1.3785E-09"
+        ixz="-8.3842E-11"
+        iyy="1.0269E-05"
+        iyz="2.3893E-07"
+        izz="2.8512E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find robot_bringup)/meshes/left_tibia.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.2 0.7 0.2 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find robot_bringup)/meshes/left_tibia.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_knee"
+    type="revolute">
+    <origin
+      xyz="0 0.268999999999999 0"
+      rpy="0 0 0" />
+    <parent
+      link="left_femur2" />
+    <child
+      link="left_tibia" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2"
+      upper="2"
+      effort="3"
+      velocity="10" />
+  </joint>
+  <link
+    name="left_foot">
+    <inertial>
+      <origin
+        xyz="1.0408E-16 0.027304 -0.021917"
+        rpy="0 0 0" />
+      <mass
+        value="0.03" />
+      <inertia
+        ixx="1.1717E-05"
+        ixy="3.0466E-20"
+        ixz="-1.0881E-20"
+        iyy="3.3659E-05"
+        iyz="-4.6463E-08"
+        izz="2.9451E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find robot_bringup)/meshes/left_foot.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.5 0.5 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find robot_bringup)/meshes/left_foot.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_ankle"
+    type="revolute">
+    <origin
+      xyz="0 0.270250000000002 -0.00339999999999996"
+      rpy="0 0 0" />
+    <parent
+      link="left_tibia" />
+    <child
+      link="left_foot" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2"
+      upper="2"
+      effort="1"
+      velocity="10" />
+  </joint>
+  <link
+    name="right_femur1">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.11" />
+      <inertia
+        ixx="0"
+        ixy="0"
+        ixz="0"
+        iyy="0"
+        iyz="0"
+        izz="0" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find robot_bringup)/meshes/right_femur1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find robot_bringup)/meshes/right_femur1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_hip1"
+    type="revolute">
+    <origin
+      xyz="0.14175 -0.0234 -0.04575"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="right_femur1" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2"
+      upper="2"
+      effort="3"
+      velocity="10" />
+  </joint>
+  <link
+    name="right_femur2">
+    <inertial>
+      <origin
+        xyz="1.5266E-16 0.1345 -0.0254"
+        rpy="0 0 0" />
+      <mass
+        value="0.05" />
+      <inertia
+        ixx="2.5129E-05"
+        ixy="4.6132E-15"
+        ixz="2.779E-22"
+        iyy="7.512E-06"
+        iyz="-3.2172E-21"
+        izz="1.9154E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find robot_bringup)/meshes/right_femur2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.1 0.2 0.8 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find robot_bringup)/meshes/right_femur2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_hip2"
+    type="revolute">
+    <origin
+      xyz="-0.0234 -0.0447500000000001 -0.0394"
+      rpy="3.14159265358979 1.5707963267949 0" />
+    <parent
+      link="right_femur1" />
+    <child
+      link="right_femur2" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2"
+      upper="2"
+      effort="3"
+      velocity="10" />
+  </joint>
+  <link
+    name="right_tibia">
+    <inertial>
+      <origin
+        xyz="-8.5983E-07 0.094337 0.023388"
+        rpy="0 0 0" />
+      <mass
+        value="0.15" />
+      <inertia
+        ixx="3.0605E-05"
+        ixy="-1.3785E-09"
+        ixz="-8.3842E-11"
+        iyy="1.0269E-05"
+        iyz="-2.3893E-07"
+        izz="2.8512E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find robot_bringup)/meshes/right_tibia.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.2 0.7 0.2 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find robot_bringup)/meshes/right_tibia.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_knee"
+    type="revolute">
+    <origin
+      xyz="0 0.268999999999999 -0.0508"
+      rpy="0 0 0" />
+    <parent
+      link="right_femur2" />
+    <child
+      link="right_tibia" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2"
+      upper="2"
+      effort="3"
+      velocity="10" />
+  </joint>
+  <link
+    name="right_foot">
+    <inertial>
+      <origin
+        xyz="-1.4225E-16 0.027304 0.021917"
+        rpy="0 0 0" />
+      <mass
+        value="0.03" />
+      <inertia
+        ixx="1.1717E-05"
+        ixy="-9.0596E-21"
+        ixz="-1.7544E-21"
+        iyy="3.3659E-05"
+        iyz="4.6463E-08"
+        izz="2.9451E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find robot_bringup)/meshes/right_foot.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.5 0.5 0 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="file://$(find robot_bringup)/meshes/right_foot.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_ankle"
+    type="revolute">
+    <origin
+      xyz="0 0.270250000000002 0.00340000000000015"
+      rpy="0 0 0" />
+    <parent
+      link="right_tibia" />
+    <child
+      link="right_foot" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2"
+      upper="2"
+      effort="1"
+      velocity="10" />
+  </joint>
+
+  <ros2_control name="leg" type="system">
+      <hardware>
+          <xacro:if value="$(arg USE_WITH_SIM)">
+              <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+          </xacro:if>
+          <xacro:unless value="$(arg USE_WITH_SIM)">
+            <plugin>dynamixel_hardware/DynamixelHardware</plugin>
+            <param name="usb_port">/dev/ttyUSB0</param>
+            <param name="baud_rate">57600</param>
+            <param name="control_mode">position</param>
+          </xacro:unless>
+      </hardware>
+      <joint name="right_hip1">
+          <param name="id">1</param>
+          <command_interface name="position"/>
+          <!-- <command_interface name="velocity"/> -->
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+      </joint>
+      <joint name="right_hip2">
+          <param name="id">2</param>
+          <command_interface name="position"/>
+          <!-- <command_interface name="velocity"/> -->
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+      </joint>
+      <joint name="right_knee">
+          <param name="id">3</param>
+          <command_interface name="position"/>
+          <!-- <command_interface name="velocity"/> -->
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+      </joint>
+      <joint name="left_hip1">
+          <param name="id">5</param>
+          <command_interface name="position"/>
+          <!-- <command_interface name="velocity"/> -->
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+      </joint>
+      <joint name="left_hip2">
+          <param name="id">6</param>
+          <command_interface name="position"/>
+          <!-- <command_interface name="velocity"/> -->
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+      </joint>
+      <joint name="left_knee">
+          <param name="id">7</param>
+          <command_interface name="position"/>
+          <!-- <command_interface name="velocity"/> -->
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+      </joint>
+      <joint name="right_ankle">
+          <param name="id">4</param>
+          <command_interface name="position"/>
+          <!-- <command_interface name="velocity"/> -->
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+      </joint>
+      <joint name="left_ankle">
+          <param name="id">8</param>
+          <command_interface name="position"/>
+          <!-- <command_interface name="velocity"/> -->
+          <state_interface name="position"/>
+          <state_interface name="velocity"/>
+      </joint>
+  </ros2_control>
+
+
+  <xacro:if value="$(arg USE_WITH_SIM)">
+        <gazebo>
+            <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+                <parameters>$(find robot_bringup)/config/biped.yaml</parameters>
+                <ros>
+                    <namespace>/$(arg NAMESPACE)</namespace>
+                </ros>
+            </plugin>
+        </gazebo>
+  </xacro:if>
+
+</robot>

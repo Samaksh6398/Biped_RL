@@ -1,0 +1,2694 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="biped_v4.2">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="4.4124E-18 -9.8982E-18 0.0040803"
+        rpy="0 0 0" />
+      <mass
+        value="0.018" />
+      <inertia
+        ixx="4.6769E-06"
+        ixy="-2.5695E-22"
+        ixz="-1.2432E-21"
+        iyy="7.0752E-06"
+        iyz="1.0134E-21"
+        izz="1.1469E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="fix_leftlegtobaselink">
+    <inertial>
+      <origin
+        xyz="3.1196E-09 -0.049316 0.0042205"
+        rpy="0 0 0" />
+      <mass
+        value="0.028" />
+      <inertia
+        ixx="8.1588E-06"
+        ixy="-1.3085E-13"
+        ixz="-4.33E-11"
+        iyy="7.7241E-06"
+        iyz="-9.9424E-07"
+        izz="8.6259E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_leftlegtobaselink.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_leftlegtobaselink.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="leftlegtobaselink"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="fix_leftlegtobaselink" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_lefthip1towaist">
+    <inertial>
+      <origin
+        xyz="-0.00081105 -0.072311 -0.024125"
+        rpy="0 0 0" />
+      <mass
+        value="0.08" />
+      <inertia
+        ixx="1.0361E-05"
+        ixy="-2.2331E-07"
+        ixz="-2.3381E-17"
+        iyy="6.7254E-06"
+        iyz="-2.8598E-14"
+        izz="1.1542E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_lefthip1towaist.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_lefthip1towaist.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lefthip1towaist"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="fix_leftlegtobaselink" />
+    <child
+      link="fix_lefthip1towaist" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="revolute_left_femur1_1">
+    <inertial>
+      <origin
+        xyz="0.019235 -1.3878E-17 0.026145"
+        rpy="0 0 0" />
+      <mass
+        value="0.016" />
+      <inertia
+        ixx="4.4847E-06"
+        ixy="-3.556E-22"
+        ixz="2.5399E-07"
+        iyy="5.4156E-06"
+        iyz="6.7195E-22"
+        izz="1.6499E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/revolute_left_femur1_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/revolute_left_femur1_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_hip1"
+    type="revolute">
+    <origin
+      xyz="-0.0234 -0.08425 -0.024125"
+      rpy="0 1.5708 0" />
+    <parent
+      link="fix_lefthip1towaist" />
+    <child
+      link="revolute_left_femur1_1" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-1.732"
+      upper="1.732"
+      effort="3.7"
+      velocity="10" />
+  </joint>
+  <link
+    name="fix_leftfemur1_2">
+    <inertial>
+      <origin
+        xyz="0.048875 -0.00081105 0.021339"
+        rpy="0 0 0" />
+      <mass
+        value="0.08" />
+      <inertia
+        ixx="1.1542E-05"
+        ixy="-2.3389E-17"
+        ixz="-2.8598E-14"
+        iyy="1.0361E-05"
+        iyz="-2.2331E-07"
+        izz="6.7254E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_leftfemur1_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_leftfemur1_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="leftfemur1_2"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_left_femur1_1" />
+    <child
+      link="fix_leftfemur1_2" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="revolute_left_femur2_1">
+    <inertial>
+      <origin
+        xyz="-1.5434E-11 -0.024976 -0.025952"
+        rpy="0 0 0" />
+      <mass
+        value="0.016" />
+      <inertia
+        ixx="7.0717E-06"
+        ixy="-1.5333E-15"
+        ixz="2.8537E-12"
+        iyy="4.694E-06"
+        iyz="2.9746E-07"
+        izz="3.2637E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/revolute_left_femur2_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/revolute_left_femur2_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_hip2"
+    type="revolute">
+    <origin
+      xyz="0.048875 -0.0234 0.0094"
+      rpy="1.5708 -1.5708 0" />
+    <parent
+      link="fix_leftfemur1_2" />
+    <child
+      link="revolute_left_femur2_1" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.732"
+      upper="1.732"
+      effort="3.7"
+      velocity="10" />
+  </joint>
+  <link
+    name="fix_left_femur2_2">
+    <inertial>
+      <origin
+        xyz="1.5434E-11 -0.11202 -0.025952"
+        rpy="0 0 0" />
+      <mass
+        value="0.016" />
+      <inertia
+        ixx="7.0717E-06"
+        ixy="-1.5333E-15"
+        ixz="-2.8537E-12"
+        iyy="4.694E-06"
+        iyz="-2.9746E-07"
+        izz="3.2637E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_left_femur2_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_left_femur2_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_femur2_2"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_left_femur2_1" />
+    <child
+      link="fix_left_femur2_2" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="revolute_left_knee">
+    <inertial>
+      <origin
+        xyz="6.9714E-13 -0.011939 0.022589"
+        rpy="0 0 0" />
+      <mass
+        value="0.08" />
+      <inertia
+        ixx="1.1542E-05"
+        ixy="2.8598E-14"
+        ixz="-2.3379E-17"
+        iyy="6.7254E-06"
+        iyz="2.2331E-07"
+        izz="1.0361E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/revolute_left_knee.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/revolute_left_knee.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_knee"
+    type="revolute">
+    <origin
+      xyz="0 -0.137 0"
+      rpy="-3.1416 0 -3.1416" />
+    <parent
+      link="fix_left_femur2_2" />
+    <child
+      link="revolute_left_knee" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-2"
+      upper="2"
+      effort="5"
+      velocity="10" />
+  </joint>
+  <link
+    name="fix_lefttibia_1">
+    <inertial>
+      <origin
+        xyz="-8.9841E-06 -0.14408 0.022299"
+        rpy="0 0 0" />
+      <mass
+        value="0.048" />
+      <inertia
+        ixx="1.096E-05"
+        ixy="-4.4082E-09"
+        ixz="-5.2455E-09"
+        iyy="6.3088E-06"
+        iyz="-2.5553E-07"
+        izz="9.8712E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_lefttibia_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_lefttibia_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lefttibia_1"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_left_knee" />
+    <child
+      link="fix_lefttibia_1" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="revolute_leftfoot">
+    <inertial>
+      <origin
+        xyz="-0.028011 -9.3851E-09 0.02634"
+        rpy="0 0 0" />
+      <mass
+        value="0.05" />
+      <inertia
+        ixx="0.00011215"
+        ixy="1.3611E-11"
+        ixz="1.1623E-06"
+        iyy="2.353E-05"
+        iyz="1.474E-11"
+        izz="9.8623E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/revolute_leftfoot.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/revolute_leftfoot.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_ankle"
+    type="revolute">
+    <origin
+      xyz="0 -0.156 0.0025"
+      rpy="0 0 1.5708" />
+    <parent
+      link="fix_lefttibia_1" />
+    <child
+      link="revolute_leftfoot" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-1.732"
+      upper="1.732"
+      effort="1.5"
+      velocity="10" />
+  </joint>
+  <link
+    name="fixed_left_sensor_motor">
+    <inertial>
+      <origin
+        xyz="-0.024005 0.051249 0.019769"
+        rpy="0 0 0" />
+      <mass
+        value="0.02" />
+      <inertia
+        ixx="1.5824E-06"
+        ixy="1.3786E-09"
+        ixz="8.4019E-11"
+        iyy="6.4425E-07"
+        iyz="2.6599E-09"
+        izz="1.8364E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fixed_left_sensor_motor.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fixed_left_sensor_motor.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_sensor_motor"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_leftfoot" />
+    <child
+      link="fixed_left_sensor_motor" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="revolute_left_sensorstick">
+    <inertial>
+      <origin
+        xyz="0.018226 -0.0048799 -0.0017916"
+        rpy="0 0 0" />
+      <mass
+        value="0.003" />
+      <inertia
+        ixx="8.7814E-08"
+        ixy="1.5681E-07"
+        ixz="5.328E-09"
+        iyy="4.4629E-07"
+        iyz="-1.4667E-09"
+        izz="5.3079E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/revolute_left_sensorstick.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/revolute_left_sensorstick.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_sensor"
+    type="fixed">
+    <origin
+      xyz="-0.024 0.044035 0.03655"
+      rpy="0 0 -1.5708" />
+    <parent
+      link="fixed_left_sensor_motor" />
+    <child
+      link="revolute_left_sensorstick" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_lefttibia_2">
+    <inertial>
+      <origin
+        xyz="3.7175E-15 -0.11491 0.0234"
+        rpy="0 0 0" />
+      <mass
+        value="0.01" />
+      <inertia
+        ixx="8.4456E-07"
+        ixy="-7.3791E-20"
+        ixz="1.598E-13"
+        iyy="1.1166E-06"
+        iyz="9.6426E-20"
+        izz="1.4884E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_lefttibia_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_lefttibia_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lefttibia_2"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_left_knee" />
+    <child
+      link="fix_lefttibia_2" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_lefttibia_3">
+    <inertial>
+      <origin
+        xyz="-0.00077912 -0.0984 0.026003"
+        rpy="0 0 0" />
+      <mass
+        value="0.0008" />
+      <inertia
+        ixx="8.7805E-08"
+        ixy="7.3833E-23"
+        ixz="8.4902E-09"
+        iyy="1.4099E-07"
+        iyz="-1.6505E-22"
+        izz="6.0985E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_lefttibia_3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_lefttibia_3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lefttibia_3"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_left_knee" />
+    <child
+      link="fix_lefttibia_3" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_lefttibia_4">
+    <inertial>
+      <origin
+        xyz="-3.1225E-17 -0.078 0.0234"
+        rpy="0 0 0" />
+      <mass
+        value="0.007" />
+      <inertia
+        ixx="1.0158E-06"
+        ixy="-4.8933E-22"
+        ixz="2.5203E-24"
+        iyy="4.3472E-08"
+        iyz="5.7911E-22"
+        izz="1.0158E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_lefttibia_4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_lefttibia_4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lefttibia_4"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_left_knee" />
+    <child
+      link="fix_lefttibia_4" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_lefttibia_5">
+    <inertial>
+      <origin
+        xyz="3.8181E-15 -0.04109 0.0234"
+        rpy="0 0 0" />
+      <mass
+        value="0.01" />
+      <inertia
+        ixx="8.4456E-07"
+        ixy="7.5844E-20"
+        ixz="-1.598E-13"
+        iyy="1.1166E-06"
+        iyz="9.6276E-20"
+        izz="1.4884E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_lefttibia_5.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_lefttibia_5.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lefttibia_5"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_left_knee" />
+    <child
+      link="fix_lefttibia_5" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_lefttibia_6">
+    <inertial>
+      <origin
+        xyz="8.6736E-18 -0.00179 0.035364"
+        rpy="0 0 0" />
+      <mass
+        value="0.004" />
+      <inertia
+        ixx="4.093E-07"
+        ixy="2.1482E-23"
+        ixz="4.5005E-22"
+        iyy="1.0855E-06"
+        iyz="1.343E-09"
+        izz="7.5439E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_lefttibia_6.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_lefttibia_6.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lefttibia_6"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_left_knee" />
+    <child
+      link="fix_lefttibia_6" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_left_femur2_3">
+    <inertial>
+      <origin
+        xyz="2.3419E-16 -0.0685 -0.0254"
+        rpy="0 0 0" />
+      <mass
+        value="0.007" />
+      <inertia
+        ixx="1.0158E-06"
+        ixy="1.3513E-21"
+        ixz="2.068E-24"
+        iyy="4.3472E-08"
+        iyz="-1.4515E-22"
+        izz="1.0158E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_left_femur2_3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_left_femur2_3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="left_femur2_3"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_left_femur2_1" />
+    <child
+      link="fix_left_femur2_3" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_femur1_3">
+    <inertial>
+      <origin
+        xyz="0.048875 0.0066861 0.018792"
+        rpy="0 0 0" />
+      <mass
+        value="0.008" />
+      <inertia
+        ixx="1.446E-06"
+        ixy="-6.4029E-22"
+        ixz="4.7002E-22"
+        iyy="2.2684E-06"
+        iyz="3.6652E-07"
+        izz="2.2752E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_femur1_3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_femur1_3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="femur1_3"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_left_femur1_1" />
+    <child
+      link="fix_femur1_3" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_femur1_4">
+    <inertial>
+      <origin
+        xyz="-2.4286E-17 -1.1102E-16 0.0494"
+        rpy="0 0 0" />
+      <mass
+        value="0.0003" />
+      <inertia
+        ixx="7.2605E-09"
+        ixy="-4.3877E-24"
+        ixz="-3.1443E-25"
+        iyy="7.2605E-09"
+        iyz="-8.4337E-25"
+        izz="1.3645E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_femur1_4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_femur1_4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="femur1_4"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_left_femur1_1" />
+    <child
+      link="fix_femur1_4" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_lefthip1motorbody">
+    <inertial>
+      <origin
+        xyz="1.0408E-17 0.0093922 0.030086"
+        rpy="0 0 0" />
+      <mass
+        value="0.008" />
+      <inertia
+        ixx="1.446E-06"
+        ixy="-3.0675E-22"
+        ixz="5.2827E-24"
+        iyy="2.2752E-06"
+        iyz="3.6652E-07"
+        izz="2.2684E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_lefthip1motorbody.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_lefthip1motorbody.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="lefthip1motorbody"
+    type="fixed">
+    <origin
+      xyz="-0.0234 -0.08425 -0.024125"
+      rpy="0 1.5708 0" />
+    <parent
+      link="fix_leftlegtobaselink" />
+    <child
+      link="fix_lefthip1motorbody" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_rightlegtobaselink">
+    <inertial>
+      <origin
+        xyz="-3.1196E-09 0.049316 0.0042205"
+        rpy="0 0 0" />
+      <mass
+        value="0.028" />
+      <inertia
+        ixx="8.1588E-06"
+        ixy="-1.3085E-13"
+        ixz="4.33E-11"
+        iyy="7.7241E-06"
+        iyz="9.9424E-07"
+        izz="8.6259E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_rightlegtobaselink.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_rightlegtobaselink.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="rightlegtobaselink"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="fix_rightlegtobaselink" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_righthip1towaist">
+    <inertial>
+      <origin
+        xyz="-0.00081105 0.072311 -0.024125"
+        rpy="0 0 0" />
+      <mass
+        value="0.08" />
+      <inertia
+        ixx="1.0361E-05"
+        ixy="2.2331E-07"
+        ixz="2.3379E-17"
+        iyy="6.7254E-06"
+        iyz="-2.8598E-14"
+        izz="1.1542E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_righthip1towaist.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_righthip1towaist.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="righthip1towaist"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="fix_rightlegtobaselink" />
+    <child
+      link="fix_righthip1towaist" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="revolute_rightfemer1_1">
+    <inertial>
+      <origin
+        xyz="0 -0.019235 0.026145"
+        rpy="0 0 0" />
+      <mass
+        value="0.016" />
+      <inertia
+        ixx="5.4156E-06"
+        ixy="2.2709E-24"
+        ixz="-2.5497E-23"
+        iyy="4.4847E-06"
+        iyz="-2.5399E-07"
+        izz="1.6499E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/revolute_rightfemer1_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/revolute_rightfemer1_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_hip1"
+    type="revolute">
+    <origin
+      xyz="-0.0234 0.08425 -0.024125"
+      rpy="1.5708 0 1.5708" />
+    <parent
+      link="fix_righthip1towaist" />
+    <child
+      link="revolute_rightfemer1_1" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-1.732"
+      upper="1.732"
+      effort="3.7"
+      velocity="10" />
+  </joint>
+  <link
+    name="fix_right_femer1_2">
+    <inertial>
+      <origin
+        xyz="0.00081105 -0.048875 0.021339"
+        rpy="0 0 0" />
+      <mass
+        value="0.08" />
+      <inertia
+        ixx="1.0361E-05"
+        ixy="2.3366E-17"
+        ixz="2.2331E-07"
+        iyy="1.1542E-05"
+        iyz="-2.8598E-14"
+        izz="6.7254E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_right_femer1_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_right_femer1_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="rightfemer1_2"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_rightfemer1_1" />
+    <child
+      link="fix_right_femer1_2" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="revolute_right_femur2_1">
+    <inertial>
+      <origin
+        xyz="-1.5434E-11 -0.024976 -0.025952"
+        rpy="0 0 0" />
+      <mass
+        value="0.016" />
+      <inertia
+        ixx="7.0717E-06"
+        ixy="-1.5333E-15"
+        ixz="2.8537E-12"
+        iyy="4.694E-06"
+        iyz="2.9746E-07"
+        izz="3.2637E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/revolute_right_femur2_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/revolute_right_femur2_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_hip2"
+    type="revolute">
+    <origin
+      xyz="0.0234 -0.048875 0.0094"
+      rpy="0 1.5708 0" />
+    <parent
+      link="fix_right_femer1_2" />
+    <child
+      link="revolute_right_femur2_1" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.732"
+      upper="1.732"
+      effort="3.7"
+      velocity="10" />
+  </joint>
+  <link
+    name="fix_right_femur2_2">
+    <inertial>
+      <origin
+        xyz="1.5435E-11 -0.11202 -0.025952"
+        rpy="0 0 0" />
+      <mass
+        value="0.016" />
+      <inertia
+        ixx="7.0717E-06"
+        ixy="-1.5333E-15"
+        ixz="-2.8537E-12"
+        iyy="4.694E-06"
+        iyz="-2.9746E-07"
+        izz="3.2637E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_right_femur2_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_right_femur2_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_femur2_2"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_right_femur2_1" />
+    <child
+      link="fix_right_femur2_2" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="revolute_right_knee">
+    <inertial>
+      <origin
+        xyz="-6.9711E-13 -0.011939 -0.022589"
+        rpy="0 0 0" />
+      <mass
+        value="0.08" />
+      <inertia
+        ixx="1.1542E-05"
+        ixy="-2.8598E-14"
+        ixz="-2.3379E-17"
+        iyy="6.7254E-06"
+        iyz="-2.2331E-07"
+        izz="1.0361E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/revolute_right_knee.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/revolute_right_knee.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_knee"
+    type="revolute">
+    <origin
+      xyz="0 -0.137 0"
+      rpy="0 0 0" />
+    <parent
+      link="fix_right_femur2_2" />
+    <child
+      link="revolute_right_knee" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2"
+      upper="2"
+      effort="5"
+      velocity="10" />
+  </joint>
+  <link
+    name="fix_righttibia_1">
+    <inertial>
+      <origin
+        xyz="8.9841E-06 -0.14408 -0.022299"
+        rpy="0 0 0" />
+      <mass
+        value="0.048" />
+      <inertia
+        ixx="1.096E-05"
+        ixy="4.4082E-09"
+        ixz="-5.2455E-09"
+        iyy="6.3088E-06"
+        iyz="2.5553E-07"
+        izz="9.8712E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_righttibia_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_righttibia_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="righttibia_1"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_right_knee" />
+    <child
+      link="fix_righttibia_1" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="revolute_rightfoot">
+    <inertial>
+      <origin
+        xyz="-9.3851E-09 -0.028011 -0.02634"
+        rpy="0 0 0" />
+      <mass
+        value="0.05" />
+      <inertia
+        ixx="2.353E-05"
+        ixy="1.3611E-11"
+        ixz="-1.474E-11"
+        iyy="0.00011215"
+        iyz="-1.1623E-06"
+        izz="9.8623E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/revolute_rightfoot.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/revolute_rightfoot.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_ankle"
+    type="revolute">
+    <origin
+      xyz="0 -0.156 -0.0025"
+      rpy="0 0 0" />
+    <parent
+      link="fix_righttibia_1" />
+    <child
+      link="revolute_rightfoot" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.732"
+      upper="1.732"
+      effort="1.5"
+      velocity="10" />
+  </joint>
+  <link
+    name="fixed_right_sensor_motor">
+    <inertial>
+      <origin
+        xyz="-0.051249 -0.023995 -0.019769"
+        rpy="0 0 0" />
+      <mass
+        value="0.02" />
+      <inertia
+        ixx="6.4425E-07"
+        ixy="1.3786E-09"
+        ixz="2.6599E-09"
+        iyy="1.5824E-06"
+        iyz="8.4019E-11"
+        izz="1.8364E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fixed_right_sensor_motor.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fixed_right_sensor_motor.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_sensor_motor"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_rightfoot" />
+    <child
+      link="fixed_right_sensor_motor" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="revolute_right_sensorstick">
+    <inertial>
+      <origin
+        xyz="-0.025809 -0.02888 -0.035342"
+        rpy="0 0 0" />
+      <mass
+        value="0.003" />
+      <inertia
+        ixx="8.7814E-08"
+        ixy="1.5681E-07"
+        ixz="5.328E-09"
+        iyy="4.4629E-07"
+        iyz="-1.4667E-09"
+        izz="5.3079E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/revolute_right_sensorstick.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/revolute_right_sensorstick.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_sensor"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="fixed_right_sensor_motor" />
+    <child
+      link="revolute_right_sensorstick" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="fix_righttibia_2">
+    <inertial>
+      <origin
+        xyz="-3.7591E-15 -0.11491 -0.0234"
+        rpy="0 0 0" />
+      <mass
+        value="0.01" />
+      <inertia
+        ixx="8.4456E-07"
+        ixy="7.5533E-20"
+        ixz="1.598E-13"
+        iyy="1.1166E-06"
+        iyz="-9.711E-20"
+        izz="1.4884E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_righttibia_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_righttibia_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="righttibia_2"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_right_knee" />
+    <child
+      link="fix_righttibia_2" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_righttibia_3">
+    <inertial>
+      <origin
+        xyz="0.00077912 -0.0984 -0.026003"
+        rpy="0 0 0" />
+      <mass
+        value="0.0008" />
+      <inertia
+        ixx="8.7805E-08"
+        ixy="7.4488E-23"
+        ixz="8.4902E-09"
+        iyy="1.4099E-07"
+        iyz="3.8179E-23"
+        izz="6.0985E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_righttibia_3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_righttibia_3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="righttibia_3"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_right_knee" />
+    <child
+      link="fix_righttibia_3" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_righttibia_4">
+    <inertial>
+      <origin
+        xyz="7.4593E-17 -0.078 -0.0234"
+        rpy="0 0 0" />
+      <mass
+        value="0.007" />
+      <inertia
+        ixx="1.0158E-06"
+        ixy="-2.6095E-22"
+        ixz="4.3944E-24"
+        iyy="4.3472E-08"
+        iyz="-1.5418E-21"
+        izz="1.0158E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_righttibia_4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_righttibia_4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="righttibia_4"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_right_knee" />
+    <child
+      link="fix_righttibia_4" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_righttibia_5">
+    <inertial>
+      <origin
+        xyz="-3.8095E-15 -0.04109 -0.0234"
+        rpy="0 0 0" />
+      <mass
+        value="0.01" />
+      <inertia
+        ixx="8.4456E-07"
+        ixy="-7.5397E-20"
+        ixz="-1.598E-13"
+        iyy="1.1166E-06"
+        iyz="-9.6823E-20"
+        izz="1.4884E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_righttibia_5.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_righttibia_5.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="righttibia_5"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_right_knee" />
+    <child
+      link="fix_righttibia_5" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_righttibia_6">
+    <inertial>
+      <origin
+        xyz="1.5613E-17 -0.00179 -0.035364"
+        rpy="0 0 0" />
+      <mass
+        value="0.004" />
+      <inertia
+        ixx="4.093E-07"
+        ixy="-2.35E-22"
+        ixz="-2.4013E-23"
+        iyy="1.0855E-06"
+        iyz="-1.343E-09"
+        izz="7.5439E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_righttibia_6.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_righttibia_6.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="righttibia_6"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_right_knee" />
+    <child
+      link="fix_righttibia_6" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_right_femur2_3">
+    <inertial>
+      <origin
+        xyz="9.1073E-16 -0.0685 -0.0254"
+        rpy="0 0 0" />
+      <mass
+        value="0.007" />
+      <inertia
+        ixx="1.0158E-06"
+        ixy="-4.5908E-22"
+        ixz="1.4217E-24"
+        iyy="4.3472E-08"
+        iyz="2.8498E-22"
+        izz="1.0158E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_right_femur2_3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_right_femur2_3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_femur2_3"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_right_femur2_1" />
+    <child
+      link="fix_right_femur2_3" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_rightfemer1_3">
+    <inertial>
+      <origin
+        xyz="-0.0066861 -0.048875 0.018792"
+        rpy="0 0 0" />
+      <mass
+        value="0.008" />
+      <inertia
+        ixx="2.2684E-06"
+        ixy="-7.6418E-22"
+        ixz="-3.6652E-07"
+        iyy="1.446E-06"
+        iyz="-3.1375E-22"
+        izz="2.2752E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_rightfemer1_3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_rightfemer1_3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="rightfemer1_3"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_rightfemer1_1" />
+    <child
+      link="fix_rightfemer1_3" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_rightfemer1_4">
+    <inertial>
+      <origin
+        xyz="-2.7756E-17 4.8572E-17 0.0494"
+        rpy="0 0 0" />
+      <mass
+        value="0.0003" />
+      <inertia
+        ixx="7.2605E-09"
+        ixy="3.5355E-24"
+        ixz="-7.9295E-26"
+        iyy="7.2605E-09"
+        iyz="-3.6882E-25"
+        izz="1.3645E-08" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_rightfemer1_4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_rightfemer1_4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="rightfemer1_4"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="revolute_rightfemer1_1" />
+    <child
+      link="fix_rightfemer1_4" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_right_hip1motorbody">
+    <inertial>
+      <origin
+        xyz="0.0066861 0.074858 -0.024125"
+        rpy="0 0 0" />
+      <mass
+        value="0.008" />
+      <inertia
+        ixx="2.2684E-06"
+        ixy="-3.6652E-07"
+        ixz="1.5954E-22"
+        iyy="2.2752E-06"
+        iyz="-3.8657E-22"
+        izz="1.446E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_right_hip1motorbody.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_right_hip1motorbody.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="right_hip1motorbody"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="fix_rightlegtobaselink" />
+    <child
+      link="fix_right_hip1motorbody" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_torsotobaselink1">
+    <inertial>
+      <origin
+        xyz="-0.0012934 -1.4845E-18 0.024635"
+        rpy="0 0 0" />
+      <mass
+        value="0.02" />
+      <inertia
+        ixx="4.4663E-06"
+        ixy="-1.866E-21"
+        ixz="4.8115E-07"
+        iyy="9.7972E-06"
+        iyz="-7.7382E-23"
+        izz="9.8392E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_torsotobaselink1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_torsotobaselink1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="torsotobaselink1"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="fix_torsotobaselink1" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="servo1">
+    <inertial>
+      <origin
+        xyz="-0.0298 0.015029 0.00068167"
+        rpy="0 0 0" />
+      <mass
+        value="0.048" />
+      <inertia
+        ixx="3.834E-05"
+        ixy="4.775E-14"
+        ixz="-8.2973E-14"
+        iyy="2.1548E-05"
+        iyz="1.6188E-07"
+        izz="3.1728E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/servo1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/servo1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="revolute_torso"
+    type="revolute">
+    <origin
+      xyz="0 0.0298000000000001 0.0422500000000002"
+      rpy="1.57079632679489 0 1.5707963267949" />
+    <parent
+      link="fix_torsotobaselink1" />
+    <child
+      link="servo1" />
+    <axis
+      xyz="1 0 0" />
+    <limit
+      lower="-1.732"
+      upper="1.732"
+      effort="13"
+      velocity="10" />
+  </joint>
+  <link
+    name="fix_torsolink1">
+    <inertial>
+      <origin
+        xyz="-0.02995 0.049553 9.5568E-17"
+        rpy="0 0 0" />
+      <mass
+        value="0.009726" />
+      <inertia
+        ixx="1.0537E-06"
+        ixy="1.8337E-23"
+        ixz="8.0242E-15"
+        iyy="1.857E-06"
+        iyz="-2.6094E-22"
+        izz="2.1198E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_torsolink1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_torsolink1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="torsolink1"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="servo1" />
+    <child
+      link="fix_torsolink1" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_torsolink2">
+    <inertial>
+      <origin
+        xyz="-0.02995 0.20875 -1.9427E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.015" />
+      <inertia
+        ixx="5.848E-05"
+        ixy="-4.8295E-21"
+        ixz="7.8582E-25"
+        iyy="1.4923E-07"
+        iyz="-1.4149E-19"
+        izz="5.848E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_torsolink2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_torsolink2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="torsolink2"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="servo1" />
+    <child
+      link="fix_torsolink2" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_torsolink3">
+    <inertial>
+      <origin
+        xyz="-0.02995 0.36452 8.7083E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.006125" />
+      <inertia
+        ixx="6.0919E-07"
+        ixy="1.4459E-22"
+        ixz="1.2785E-17"
+        iyy="5.457E-07"
+        iyz="-2.4708E-22"
+        izz="7.0719E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_torsolink3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_torsolink3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="torsolink3"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="servo1" />
+    <child
+      link="fix_torsolink3" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_torsoweight">
+    <inertial>
+      <origin
+        xyz="-0.02995 0.37425 8.6844E-16"
+        rpy="0 0 0" />
+      <mass
+        value="0.22" />
+      <inertia
+        ixx="2.2936E-05"
+        ixy="-1.0195E-21"
+        ixz="-3.1525E-21"
+        iyy="4.5838E-05"
+        iyz="5.2315E-20"
+        izz="2.2933E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_torsoweight.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_torsoweight.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="torsoweight"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="servo1" />
+    <child
+      link="fix_torsoweight" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_torsotobaselink2">
+    <inertial>
+      <origin
+        xyz="-2.0606E-17 4.2712E-19 0.01875"
+        rpy="0 0 0" />
+      <mass
+        value="0.008" />
+      <inertia
+        ixx="1.5432E-06"
+        ixy="-2.4219E-21"
+        ixz="-4.9798E-23"
+        iyy="1.6175E-06"
+        iyz="3.6772E-22"
+        izz="3.1496E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_torsotobaselink2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.79216 0.81961 0.93333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_torsotobaselink2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="torsotobaselink"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="fix_torsotobaselink2" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="fix_cfpipe1tobaselink">
+    <inertial>
+      <origin
+        xyz="0.01375 -2.4889E-17 0.00925"
+        rpy="0 0 0" />
+      <mass
+        value="0.007" />
+      <inertia
+        ixx="1.3452E-06"
+        ixy="3.0777E-23"
+        ixz="0"
+        iyy="4.2234E-08"
+        iyz="3.04E-22"
+        izz="1.3452E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_cfpipe1tobaselink.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_cfpipe1tobaselink.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="cfpipe1tobaselink"
+    type="continuous">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="fix_cfpipe1tobaselink" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="fix_cfpipe2tobaselink">
+    <inertial>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.007" />
+      <inertia
+        ixx="0"
+        ixy="0"
+        ixz="0"
+        iyy="0"
+        iyz="0"
+        izz="0" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_cfpipe2tobaselink.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="/home/samaksh/biped_dev/RLstuff/Rocon-Biped-Genesis/urdf/meshes/fix_cfpipe2tobaselink.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="cfpipe2tobaselink"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="fix_cfpipe2tobaselink" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+</robot>
