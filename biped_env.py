@@ -1,3 +1,5 @@
+# biped_env.py (Corrected)
+
 import torch
 import math
 import genesis as gs
@@ -226,9 +228,17 @@ class BipedEnv:
         self.extras["time_outs"] = torch.zeros_like(self.reset_buf, device=gs.device, dtype=gs.tc_float)
         self.extras["time_outs"][time_out_idx] = 1.0
 
+      
+        self.reward_handler.compute_rewards()
+
+        # Then, accumulate these components into the episode sums for logging.
+        # This was the missing step.
+        for key, value in self.reward_handler.reward_components.items():
+            if key in self.episode_sums:
+                self.episode_sums[key] += value
+
         self.reset_idx(self.reset_buf.nonzero(as_tuple=False).reshape((-1,)))
 
-        self.reward_handler.compute_rewards()
         self.episode_sums["fps"][:] = self.current_fps
 
         hip_angles = torch.cat([(self.dof_pos[:, [0, 1]] - self.default_dof_pos[[0, 1]]) * self.obs_scales["dof_pos"], (self.dof_pos[:, [4, 5]] - self.default_dof_pos[[4, 5]]) * self.obs_scales["dof_pos"]], dim=1)
@@ -327,6 +337,20 @@ class BipedEnv:
 
         self.dr_handler.apply_on_reset(envs_idx)
 
+        # Before resetting, populate the 'extras' dictionary for logging
+        self.extras["episode"] = {}
+        for key in self.episode_sums.keys():
+            # Only log for environments that are actually resetting
+            if len(envs_idx) > 0:
+                if key == "fps":
+                    self.extras["episode"]["rew_" + key] = torch.mean(self.episode_sums[key][envs_idx]).item()
+                else:
+                    # Normalize by episode length in seconds
+                    self.extras["episode"]["rew_" + key] = (torch.mean(self.episode_sums[key][envs_idx]).item() / self.env_cfg["episode_length_s"])
+            # Reset the sums for the environments that are ending
+            self.episode_sums[key][envs_idx] = 0.0
+
+        # Now, perform the actual reset operations
         self.dof_pos[envs_idx] = self.default_dof_pos
         self.dof_vel[envs_idx] = 0.0
         self.robot.set_dofs_position(position=self.dof_pos[envs_idx], dofs_idx_local=self.motors_dof_idx, zero_velocity=True, envs_idx=envs_idx)
@@ -348,14 +372,6 @@ class BipedEnv:
         
         self.episode_length_buf[envs_idx] = 0
         self.reset_buf[envs_idx] = True
-
-        self.extras["episode"] = {}
-        for key in self.episode_sums.keys():
-            if key == "fps":
-                self.extras["episode"]["rew_" + key] = torch.mean(self.episode_sums[key][envs_idx]).item()
-            else:
-                self.extras["episode"]["rew_" + key] = (torch.mean(self.episode_sums[key][envs_idx]).item() / self.env_cfg["episode_length_s"])
-            self.episode_sums[key][envs_idx] = 0.0
 
         self._resample_commands(envs_idx)
 

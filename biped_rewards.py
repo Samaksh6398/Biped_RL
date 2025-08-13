@@ -1,3 +1,5 @@
+# biped_rewards.py (Corrected)
+
 import torch
 import numpy as np
 import genesis as gs
@@ -14,6 +16,9 @@ class RewardHandler:
         self.reward_cfg = self.env.reward_cfg
         self.env_cfg = self.env.env_cfg
         self.device = self.env.device
+        
+        # --- FIX: Initialize the attribute ---
+        self.reward_components = {}
 
         # prepare reward functions and multiply reward scales by dt
         self.reward_functions = dict()
@@ -22,13 +27,32 @@ class RewardHandler:
             self.reward_functions[name] = getattr(self, "_reward_" + name)
 
     def compute_rewards(self):
+        # --- START OF FIX ---
+        # This is the corrected logic. We now populate self.reward_components
+        # which makes the RewardHandler self-contained and fixes the AttributeError.
+        
         self.env.rew_buf[:] = 0.0
+        self.reward_components.clear() # Clear at the start of each step
+
         for name, reward_func in self.reward_functions.items():
             # Check if the reward is enabled in the config
             if self.reward_cfg.get("reward_enables", {}).get(name, True):
-                rew = reward_func() * self.reward_scales[name]
-                self.env.rew_buf += rew
-                self.env.episode_sums[name] += rew
+                # 1. Calculate the raw reward value
+                raw_rew = reward_func()
+                
+                # 2. Store the raw, unscaled reward for potential debugging
+                self.reward_components[name] = raw_rew
+                
+                # 3. Scale the reward for use
+                scaled_rew = raw_rew * self.reward_scales[name]
+                
+                # 4. Add to the total reward buffer for the agent
+                self.env.rew_buf += scaled_rew
+                
+                # 5. Add the scaled reward to the episode sums for logging
+                if name in self.env.episode_sums:
+                    self.env.episode_sums[name] += scaled_rew
+        # --- END OF FIX ---
 
     def _reward_lin_vel_z(self):
         return torch.square(self.env.base_lin_vel[:, 2])
@@ -135,49 +159,13 @@ class RewardHandler:
         return torch.exp(-error / sigma)
 
     def _reward_actuator_constraint(self):
-        """
-        Reward function that enforces actuator constraints: speed + 3.5*|torque| <= 6.16
-
-        This prevents motor overheating and ensures realistic operation within hardware limits.
-        The constraint is based on typical servo motor specifications where high speed and
-        high torque cannot be sustained simultaneously.
-
-        Returns:
-            Negative reward (penalty) for constraint violations with tolerance
-        """
-        # Get constraint parameters from config
         constraint_limit = self.reward_cfg.get("actuator_constraint_limit", 6.16)
         torque_coeff = self.reward_cfg.get("actuator_torque_coeff", 3.5)
         tolerance = self.reward_cfg.get("actuator_tolerance", 0.5)
 
-        # Calculate constraint values for all joints: speed + 3.5*|torque|
-        # Using absolute values since the constraint applies in both directions
         constraint_values = torch.abs(self.env.dof_vel) + torque_coeff * torch.abs(self.env.joint_torques)
-
-        # Calculate violations with tolerance
-        # Only penalize when constraint exceeds (limit + tolerance)
         target_with_tolerance = constraint_limit + tolerance
         violations = torch.relu(constraint_values - target_with_tolerance)
-
-        # Sum violations across all joints for each environment
         total_violation_per_env = torch.sum(violations, dim=1)
-
-        # Store violations for monitoring/debugging
         self.env.actuator_constraint_violations = total_violation_per_env
-
-        # Debug logging (print only occasionally to avoid spam)
-        if hasattr(self.env, '_debug_counter'):
-            self.env._debug_counter += 1
-        else:
-            self.env._debug_counter = 0
-
-        if self.env._debug_counter % 1000 == 0 and total_violation_per_env.max() > 0:
-            max_constraint = constraint_values.max().item()
-            max_violation = total_violation_per_env.max().item()
-            max_torque = torch.abs(self.env.joint_torques).max().item()
-            max_vel = torch.abs(self.env.dof_vel).max().item()
-            print(f"Actuator Debug - Step {self.env._debug_counter}: max_constraint={max_constraint:.2f}, "
-                  f"max_violation={max_violation:.2f}, max_torque={max_torque:.2f}, max_vel={max_vel:.2f}")
-
-        # Return negative sum of violations (penalty increases with violation magnitude)
         return -total_violation_per_env
