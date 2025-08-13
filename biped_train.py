@@ -1,4 +1,4 @@
-# biped_train.py (Corrected)
+# biped_train.py (Corrected and Cleaned)
 
 import argparse
 import os
@@ -32,10 +32,6 @@ from ppo_lstm_policy import ActorCriticLSTM, PPOLSTMAgent
 
 
 class LSTMPPORunner:
-    """
-    Custom PPO runner that handles LSTM states across steps and episodes.
-    """
-    
     def __init__(self, env, train_cfg, log_dir, device='cuda'):
         self.env = env
         self.train_cfg = train_cfg
@@ -68,7 +64,7 @@ class LSTMPPORunner:
         
         # Statistics
         self.ep_infos = []
-    
+
     def learn(self, num_learning_iterations, init_at_random_ep_len=True):
         """Main training loop"""
         
@@ -86,14 +82,14 @@ class LSTMPPORunner:
             # Collect rollout
             self.collect_rollout(obs)
             
-            # Update policy
-            self.agent.update()
+            # Update policy and get the mean losses for logging
+            mean_losses = self.agent.update()
             
             # Get new observations after policy update
             obs, infos = self.env.get_observations()
             
-            # Logging
-            self.log_training_info(it, time.time() - start_time)
+            # Log all training info
+            self.log_training_info(it, time.time() - start_time, mean_losses)
             
             # Save model periodically
             if it % self.train_cfg["save_interval"] == 0:
@@ -105,76 +101,56 @@ class LSTMPPORunner:
     def collect_rollout(self, obs):
         """Collect rollout data with LSTM states"""
         
-        # Reset storage step counter
         self.agent.storage.step = 0
-        
-        # Store initial observation and LSTM states
         self.agent.storage.observations[0].copy_(obs)
         self.agent.storage.lstm_hidden_states[0].copy_(self.lstm_states[0])
         self.agent.storage.lstm_cell_states[0].copy_(self.lstm_states[1])
         self.agent.storage.masks[0].copy_(self.masks)
         
         for step in range(self.agent.num_steps_per_env):
-            # Forward pass through policy
             with torch.no_grad():
                 actions, log_probs, values, new_lstm_states, _ = self.policy(
                     obs, self.lstm_states, self.masks
                 )
             
-            # Environment step
             obs, rewards, dones, infos, new_masks = self.env.step_lstm(actions, self.lstm_states, self.masks)
             
-            # Store experience
             self.agent.storage.insert(
-                obs=obs,
-                actions=actions,
-                rewards=rewards,
-                values=values,
-                log_probs=log_probs,
-                lstm_states=self.lstm_states,
-                masks=self.masks
+                obs=obs, actions=actions, rewards=rewards, values=values,
+                log_probs=log_probs, lstm_states=self.lstm_states, masks=self.masks
             )
             
-            # Update LSTM states and masks for next step
             self.lstm_states = new_lstm_states
             self.masks = new_masks
             
-            # Reset LSTM states for completed episodes
             reset_indices = dones.nonzero(as_tuple=False).reshape(-1)
             if len(reset_indices) > 0:
-                # Reset LSTM hidden and cell states for completed episodes
                 self.lstm_states[0][:, reset_indices, :] = 0.0
                 self.lstm_states[1][:, reset_indices, :] = 0.0
             
-            # --- START OF FIX ---
-            # Collect episode statistics
-            # The original code was incorrectly breaking up the dictionary.
-            # The correct way is to append the entire 'episode' dictionary.
             if 'episode' in infos:
                 self.ep_infos.append(infos['episode'])
-            # --- END OF FIX ---
             
             self.tot_timesteps += self.env.num_envs
-    
-    def log_training_info(self, iteration, step_time):
+
+    def log_training_info(self, iteration, step_time, losses):
         """Log training statistics"""
         
         if len(self.ep_infos) > 0:
-            # This logic is now correct because self.ep_infos contains full dictionaries
             for key in self.ep_infos[0].keys():
                 values = [ep_info[key] for ep_info in self.ep_infos if key in ep_info]
                 if values:
                     mean_value = sum(values) / len(values)
                     self.writer.add_scalar(f'Episode/{key}', mean_value, iteration)
         
-        # Clear episode infos for the next rollout
         self.ep_infos.clear()
+
+        for key, value in losses.items():
+            self.writer.add_scalar(f'Loss/{key}', value, iteration)
         
-        # Log training metrics
         self.writer.add_scalar('Training/iteration_time', step_time, iteration)
         self.writer.add_scalar('Training/total_timesteps', self.tot_timesteps, iteration)
         
-        # Log to console
         if iteration % 10 == 0:
             print(f"Iteration {iteration: <5} | Total Timesteps: {self.tot_timesteps: <8} | Step Time: {step_time:.3f}s")
     
@@ -201,18 +177,16 @@ class LSTMPPORunner:
         if device is not None:
             self.policy = self.policy.to(device)
         
-        # Import here to avoid circular import
         from biped_eval import InferencePolicyLSTM
         return InferencePolicyLSTM(self.policy, device or self.device)
 
-# ... (main function is unchanged and correct) ...
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-e", "--exp_name", type=str, default="biped-walking-lstm")
     parser.add_argument("-B", "--num_envs", type=int, default=1024)
     parser.add_argument("--max_iterations", type=int, default=10000)
 
-    # --- W&B Arguments ---
     parser.add_argument("--wandb", action="store_true", help="Enable Weights & Biases logging.")
     parser.add_argument("--wandb_project", type=str, default="biped-rl", help="W&B project name.")
     parser.add_argument("--wandb_entity", type=str, default=None, help="W&B entity (user or team).")
@@ -220,39 +194,30 @@ def main():
 
     args = parser.parse_args()
 
+    # --- THIS IS WHERE THE ERROR WAS ---
+    # The 'gs' object is defined by the import at the top of the file
     gs.init(logging_level="warning")
 
     log_dir = f"logs/{args.exp_name}"
     
-    # Get configurations
     env_cfg, obs_cfg, reward_cfg, command_cfg = get_cfgs()
     train_cfg = get_train_cfg(args.exp_name, args.max_iterations)
     
-    # The PPOLSTMAgent expects 'mini_batch_size' and 'lr' arguments, but the
-    # config from get_train_cfg() provides 'num_mini_batches' and 'learning_rate'.
-    # We perform the conversion here to make them compatible.
-
-    # 1. Update general algorithm parameters for LSTM training
     train_cfg["algorithm"]["num_steps_per_env"] = 32
-    train_cfg["algorithm"]["learning_rate"] = 3e-4 # Set desired learning rate
+    train_cfg["algorithm"]["learning_rate"] = 3e-4
 
-    # 2. Convert 'learning_rate' to 'lr'
     if 'learning_rate' in train_cfg['algorithm']:
         train_cfg['algorithm']['lr'] = train_cfg['algorithm']['learning_rate']
         del train_cfg['algorithm']['learning_rate']
 
-    # 3. Convert 'num_mini_batches' to 'mini_batch_size'
     if 'num_mini_batches' in train_cfg['algorithm']:
         batch_size = args.num_envs * train_cfg['algorithm']['num_steps_per_env']
-        # Ensure mini_batch_size is at least 1
         mini_batch_size = max(batch_size // train_cfg['algorithm']['num_mini_batches'], 1)
         train_cfg['algorithm']['mini_batch_size'] = mini_batch_size
         del train_cfg['algorithm']['num_mini_batches']
     else:
-        # Fallback if num_mini_batches is not in the config for some reason
         train_cfg['algorithm']['mini_batch_size'] = 256
     
-    # 4. Add LSTM-specific policy configuration
     train_cfg["policy"] = {
         "actor_hidden_dims": [512, 256],
         "critic_hidden_dims": [512, 256],
@@ -261,8 +226,9 @@ def main():
         "activation": "elu",
         "init_noise_std": 1.0
     }
+    
+    train_cfg["save_interval"] = 100 # Add save interval to config
 
-    # --- Initialize W&B ---
     if args.wandb:
         wandb.init(
             project=args.wandb_project,
@@ -290,7 +256,6 @@ def main():
 
     runner = LSTMPPORunner(env, train_cfg, log_dir, device=gs.device)
 
-    # Setup signal handler for graceful shutdown
     def signal_handler(sig, frame):
         print('\n\nTraining interrupted by user (Ctrl+C)')
         print('Saving current model...')
@@ -310,7 +275,6 @@ def main():
         print(f'\nTraining stopped due to error: {e}')
         raise
     finally:
-        # Final cleanup and save
         print('Final model save completed.')
         if args.wandb:
             wandb.finish()

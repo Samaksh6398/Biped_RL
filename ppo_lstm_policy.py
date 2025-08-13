@@ -1,10 +1,12 @@
+# ppo_lstm_policy.py (Corrected)
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from torch.distributions import Normal
 import numpy as np
 
-
+# ... (ActorCriticLSTM class is unchanged) ...
 class ActorCriticLSTM(nn.Module):
     """
     PPO-LSTM Actor-Critic Network
@@ -375,7 +377,12 @@ class PPOLSTMAgent:
         )
         
     def update(self):
-        """Update policy using collected rollouts"""
+        """
+        Update policy using collected rollouts.
+        
+        Returns:
+            dict: A dictionary containing the mean losses for logging.
+        """
         
         # Compute GAE advantages
         self.storage.compute_returns_and_advantages(
@@ -391,17 +398,21 @@ class PPOLSTMAgent:
         advantages_batch = (advantages_batch - advantages_batch.mean()) / \
                           (advantages_batch.std() + 1e-8)
         
+        # --- START OF FIX: Initialize loss trackers ---
+        policy_loss_list = []
+        value_loss_list = []
+        entropy_loss_list = []
+        approx_kl_list = []
+        # --- END OF FIX ---
+
         # Training loop
         for epoch in range(self.num_learning_epochs):
             
-            # Create mini-batches
             batch_size = self.num_envs * self.num_steps_per_env
-            mini_batch_size = batch_size // 4  # 4 mini-batches
-            
             indices = torch.randperm(batch_size, device=self.device)
             
-            for start in range(0, batch_size, mini_batch_size):
-                end = start + mini_batch_size
+            for start in range(0, batch_size, self.mini_batch_size):
+                end = start + self.mini_batch_size
                 batch_indices = indices[start:end]
                 
                 # Get mini-batch data
@@ -413,6 +424,7 @@ class PPOLSTMAgent:
                 old_log_probs_mb = old_log_probs_batch[batch_indices]
                 
                 # LSTM states need special handling for mini-batches
+                # Slicing along the batch dimension (dim=1)
                 lstm_hidden_mb = lstm_states_batch[0][:, batch_indices]
                 lstm_cell_mb = lstm_states_batch[1][:, batch_indices]
                 lstm_states_mb = (lstm_hidden_mb, lstm_cell_mb)
@@ -447,11 +459,33 @@ class PPOLSTMAgent:
                 total_loss.backward()
                 torch.nn.utils.clip_grad_norm_(self.policy.parameters(), self.max_grad_norm)
                 self.optimizer.step()
+
+                # --- START OF FIX: Append losses for logging ---
+                policy_loss_list.append(policy_loss.item())
+                value_loss_list.append(value_loss.item())
+                entropy_loss_list.append(entropy_loss.item())
+                # Calculate approximate KL divergence
+                with torch.no_grad():
+                    log_ratio = log_probs - old_log_probs_mb
+                    approx_kl = torch.mean((torch.exp(log_ratio) - 1) - log_ratio).item()
+                    approx_kl_list.append(approx_kl)
+                # --- END OF FIX ---
         
         # Clear storage for next rollout
         self.storage.clear()
+        
+        # --- START OF FIX: Return dictionary of mean losses ---
+        mean_losses = {
+            'policy_loss': np.mean(policy_loss_list),
+            'value_loss': np.mean(value_loss_list),
+            'entropy_loss': np.mean(entropy_loss_list),
+            'approx_kl': np.mean(approx_kl_list),
+            'learning_rate': self.optimizer.param_groups[0]['lr']
+        }
+        return mean_losses
+        # --- END OF FIX ---
 
-
+# ... (RolloutStorage class is unchanged) ...
 class RolloutStorage:
     """
     Storage for PPO-LSTM rollouts
@@ -538,13 +572,11 @@ class RolloutStorage:
         masks = self.masks[:-1].view(batch_size, -1)
         
         # LSTM states - keep layer dimension
-        lstm_hidden = self.lstm_hidden_states[:-1].view(self.num_steps * self.num_envs, -1)
-        lstm_cell = self.lstm_cell_states[:-1].view(self.num_steps * self.num_envs, -1)
-        
-        # Reshape back to (num_layers, batch_size, hidden_size)
-        lstm_hidden = lstm_hidden.view(batch_size, self.lstm_hidden_states.shape[1], -1).transpose(0, 1)
-        lstm_cell = lstm_cell.view(batch_size, self.lstm_cell_states.shape[1], -1).transpose(0, 1)
-        
+        # Reshape to (num_layers, batch_size, hidden_size)
+        lstm_hidden = self.lstm_hidden_states[0].permute(1, 0, 2).reshape(self.num_envs, -1)
+        lstm_hidden = self.lstm_hidden_states[:-1].transpose(0, 2).reshape(self.num_envs * self.num_steps, self.lstm_hidden_states.shape[1], -1).transpose(0,1)
+        lstm_cell = self.lstm_cell_states[:-1].transpose(0, 2).reshape(self.num_envs * self.num_steps, self.lstm_cell_states.shape[1], -1).transpose(0,1)
+
         lstm_states = (lstm_hidden, lstm_cell)
         
         return obs, actions, values, returns, advantages, log_probs, lstm_states, masks
