@@ -20,52 +20,8 @@ from rsl_rl.runners import OnPolicyRunner
 import genesis as gs
 
 from biped_env import BipedEnv
-from biped_env_config import get_cfgs
+from biped_config import get_cfgs, get_train_cfg
 
-def get_train_cfg(exp_name, max_iterations):
-    train_cfg_dict = {
-        "algorithm": {
-            "class_name": "PPO",
-            "clip_param": 0.2,
-            "desired_kl": 0.01,
-            "entropy_coef": 0.01,
-            "gamma": 0.99,
-            "lam": 0.95,
-            "learning_rate": 0.001,
-            "max_grad_norm": 1.0,
-            "num_learning_epochs": 5,
-            "num_mini_batches": 4,
-            "schedule": "adaptive",
-            "use_clipped_value_loss": True,
-            "value_loss_coef": 1.0,
-        },
-        "init_member_classes": {},
-        "policy": {
-            "activation": "elu",
-            "actor_hidden_dims": [512, 256, 128],
-            "critic_hidden_dims": [512, 256, 128],
-            "init_noise_std": 1.0,
-            "class_name": "ActorCritic",
-        },
-        "runner": {
-            "checkpoint": -1,
-            "experiment_name": exp_name,
-            "load_run": -1,
-            "log_interval": 1,
-            "max_iterations": max_iterations,
-            "record_interval": -1,
-            "resume": False,
-            "resume_path": None,
-            "run_name": "",
-        },
-        "runner_class_name": "OnPolicyRunner",
-        "num_steps_per_env": 24,
-        "save_interval": 100,
-        "empirical_normalization": None,
-        "seed": 1,
-    }
-
-    return train_cfg_dict
 
 def main():
     parser = argparse.ArgumentParser()
@@ -101,12 +57,12 @@ def main():
         print('Saving current model...')
         # The runner automatically saves periodically, so we just exit gracefully
         sys.exit(0)
-    
+
     signal.signal(signal.SIGINT, signal_handler)
-    
+
     print(f"Starting training... Press Ctrl+C to stop and save the model.")
     print(f"Logs will be saved to: {log_dir}")
-    
+
     try:
         runner.learn(num_learning_iterations=args.max_iterations, init_at_random_ep_len=True)
     except KeyboardInterrupt:

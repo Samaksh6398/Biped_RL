@@ -58,25 +58,25 @@ class GenesisSimulator:
         """Run the simulation and print values"""
         step_count = 0
         max_steps = 100  # Run for 100 steps for testing
-        
+
         while step_count < max_steps:
             step_count += 1
             self.step_simulation()
-            
+
             # Print values every 10 steps to see more output
             if step_count % 10 == 0:
                 print(f"\n--- Step {step_count} ---")
-            
+
             time.sleep(0.02)  # 50 Hz
 
     def step_simulation(self):
         try:
             self.scene.step()
-            
+
             # --- Get robot data with proper error handling ---
             # Get quaternion - might need different indexing
             quat_data = self.biped_robot.get_quat().cpu().numpy()
-            
+
             # Handle different possible shapes
             if quat_data.ndim == 1 and len(quat_data) == 4:
                 orientation_quat = quat_data
@@ -85,7 +85,7 @@ class GenesisSimulator:
             else:
                 print(f"Unexpected quaternion shape: {quat_data.shape}")
                 orientation_quat = np.array([1.0, 0.0, 0.0, 0.0])  # Default identity quaternion
-            
+
             # Get velocities
             vel_data = self.biped_robot.get_vel().cpu().numpy()
             if vel_data.ndim == 2 and vel_data.shape[0] > 0:
@@ -94,7 +94,7 @@ class GenesisSimulator:
                 linear_velocity = vel_data
             else:
                 linear_velocity = np.array([0.0, 0.0, 0.0])
-                
+
             ang_data = self.biped_robot.get_ang().cpu().numpy()
             if ang_data.ndim == 2 and ang_data.shape[0] > 0:
                 angular_velocity = ang_data[0]
@@ -113,7 +113,7 @@ class GenesisSimulator:
             print(f"Angular velocity: [{angular_velocity[0]:.3f}, {angular_velocity[1]:.3f}, {angular_velocity[2]:.3f}]")
             print(f"Joint positions: {joint_positions}")
             print(f"Joint velocities: {joint_velocities}")
-            
+
             # --- Read from each sensor and print contact forces ---
             if self.right_foot_sensor:
                 try:
@@ -130,7 +130,7 @@ class GenesisSimulator:
                     print(f"Left foot contact force: {max_force:.3f}")
                 except Exception as e:
                     print(f"Error reading left foot sensor: {e}")
-                    
+
         except Exception as e:
             print(f"Error in simulation step: {e}")
 
