@@ -60,9 +60,9 @@ def get_cfgs():
             "right_knee": 1.30,    # knee flexion
             "right_ankle": -0.634,  # ankle flexion
             "left_hip1": 0.0,      # hip abduction/adduction
-            "left_hip2": -0.652,    # hip flexion/extension
+            "left_hip2": 0.652,    # hip flexion/extension
             "left_knee": -1.30,    # knee flexion (negative for left leg)
-            "left_ankle": -0.634,   # ankle flexion
+            "left_ankle": 0.634,   # ankle flexion
             "revolute_torso": 0.0,          # torso rotation
         },
         "joint_names": [
@@ -94,7 +94,7 @@ def get_cfgs():
         "fall_roll_threshold": 25.0,   # Roll threshold for fall penalty (slightly less than termination)
         "fall_pitch_threshold": 25.0,  # Pitch threshold for fall penalty (slightly less than termination)
         # base pose - height adjusted for neutral configuration ground contact
-        "base_init_pos": [0.0, 0.0, -0.50],  # Lower spawn height for ground contact with neutral pose
+        "base_init_pos": [0.0, 0.0, 0.50],  # Lower spawn height for ground contact with neutral pose
         "base_init_quat": [1.0, 0.0, 0.0, 0.0],
         "episode_length_s": 90.0,
         "resampling_time_s": 4.0,
