@@ -26,7 +26,7 @@ from biped_config import get_cfgs, get_train_cfg
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-e", "--exp_name", type=str, default="biped-walking")
-    parser.add_argument("-B", "--num_envs", type=int, default=1000)
+    parser.add_argument("-B", "--num_envs", type=int, default=11000)
     parser.add_argument("--max_iterations", type=int, default=999999)  # Very large number, will run until Ctrl+C
     args = parser.parse_args()
 
