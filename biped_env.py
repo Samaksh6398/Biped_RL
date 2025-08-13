@@ -279,6 +279,39 @@ class BipedEnv:
         self.extras["fps"] = self.current_fps
 
         return self.obs_buf, self.rew_buf, self.reset_buf, self.extras
+    
+    def step_lstm(self, actions, lstm_states=None, masks=None):
+        """
+        LSTM-compatible step function that returns observations, rewards, dones, infos, and updated masks.
+        
+        Args:
+            actions: Actions to execute
+            lstm_states: Current LSTM states (not used by env, passed through)
+            masks: Episode masks indicating valid episodes (1=continue, 0=reset)
+            
+        Returns:
+            observations: Environment observations
+            rewards: Step rewards
+            dones: Episode termination flags
+            infos: Additional info dict
+            masks: Updated masks for LSTM (0 when episode resets)
+        """
+        obs, rewards, dones, infos = self.step(actions)
+        
+        # Create masks: 0 for episodes that just ended, 1 for continuing episodes
+        # Shape: [num_envs, 1] for consistency with LSTM policy expectations
+        new_masks = (~dones).float().unsqueeze(-1)
+        
+        return obs, rewards, dones, infos, new_masks
+    
+    def get_lstm_reset_indices(self):
+        """
+        Get indices of environments that ended and need LSTM state resets.
+        
+        Returns:
+            torch.Tensor: Indices of environments that just reset
+        """
+        return self.reset_buf.nonzero(as_tuple=False).reshape((-1,))
 
     def get_observations(self):
         self.extras["observations"]["critic"] = self.obs_buf
