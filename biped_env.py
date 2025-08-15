@@ -139,9 +139,6 @@ class BipedEnv:
         self.motor_backlash_direction = torch.ones((self.num_envs, self.num_actions), device=gs.device, dtype=gs.tc_float)
         self.last_motor_positions = torch.zeros_like(self.actions)
         
-        self.joint_torques = torch.zeros_like(self.actions)
-        self.actuator_constraint_violations = torch.zeros((self.num_envs,), device=gs.device, dtype=gs.tc_float)
-        
         self.foot_contacts = torch.zeros((self.num_envs, 2), device=gs.device, dtype=gs.tc_float)
         self.foot_contacts_raw = torch.zeros((self.num_envs, 2), device=gs.device, dtype=gs.tc_float)
         
@@ -190,10 +187,6 @@ class BipedEnv:
         self.dof_pos[:] = self.robot.get_dofs_position(self.motors_dof_idx)
         self.dof_vel[:] = self.robot.get_dofs_velocity(self.motors_dof_idx)
         
-        pos_error = target_dof_pos - self.dof_pos
-        vel_error = -self.dof_vel
-        self.joint_torques = self.env_cfg["kp"] * pos_error + self.env_cfg["kd"] * vel_error
-        
         if self.left_foot_contact_sensor is not None:
             left_contact_data = self.left_foot_contact_sensor.read()
             left_contact_tensor = torch.as_tensor(left_contact_data, device=self.device).reshape(self.num_envs, -1, 3)
@@ -215,14 +208,6 @@ class BipedEnv:
         self.reset_buf = self.episode_length_buf > self.max_episode_length
         self.reset_buf |= torch.abs(self.base_euler[:, 1]) > self.env_cfg["termination_if_pitch_greater_than"]
         self.reset_buf |= torch.abs(self.base_euler[:, 0]) > self.env_cfg["termination_if_roll_greater_than"]
-        
-        if self.env_cfg.get("terminate_on_actuator_violation", False):
-            constraint_values = torch.abs(self.dof_vel) + self.reward_cfg.get("actuator_torque_coeff", 3.5) * torch.abs(self.joint_torques)
-            constraint_limit = self.reward_cfg.get("actuator_constraint_limit", 6.16)
-            termination_threshold = self.env_cfg.get("actuator_violation_termination_threshold", 2.0)
-            violations = constraint_values - constraint_limit
-            max_violation_per_env = torch.max(violations, dim=1)[0]
-            self.reset_buf |= max_violation_per_env > termination_threshold
 
         time_out_idx = (self.episode_length_buf > self.max_episode_length).nonzero(as_tuple=False).reshape((-1,))
         self.extras["time_outs"] = torch.zeros_like(self.reset_buf, device=gs.device, dtype=gs.tc_float)
@@ -367,8 +352,6 @@ class BipedEnv:
         self.last_dof_vel[envs_idx] = 0.0
         self.foot_contacts[envs_idx] = 0.0
         self.randomized_kp[envs_idx] = self.orig_kp
-        self.joint_torques[envs_idx] = 0.0
-        self.actuator_constraint_violations[envs_idx] = 0.0
         
         self.episode_length_buf[envs_idx] = 0
         self.reset_buf[envs_idx] = True

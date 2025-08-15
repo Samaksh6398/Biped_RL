@@ -19,13 +19,13 @@ def get_train_cfg(exp_name, max_iterations):
             "value_loss_coef": 1.0,
         },
         "init_member_classes": {},
-        "policy": {
-            "activation": "elu",
-            "actor_hidden_dims": [512, 256, 128],
-            "critic_hidden_dims": [512, 256, 128],
-            "init_noise_std": 1.0,
-            "class_name": "ActorCritic",
-        },
+        # "policy": {
+        #     "activation": "elu",
+        #     "actor_hidden_dims": [512, 256, 128],
+        #     "critic_hidden_dims": [512, 256, 128],
+        #     "init_noise_std": 1.0,
+        #     "class_name": "ActorCritic",
+        # },
         "runner": {
             "checkpoint": -1,
             "experiment_name": exp_name,
@@ -85,10 +85,6 @@ def get_cfgs():
         # termination conditions - tighter for biped
         "termination_if_roll_greater_than": 30,  # degree - bipeds can lean more
         "termination_if_pitch_greater_than": 30, # degree
-
-        # Actuator constraint termination - more lenient to avoid immediate termination
-        "terminate_on_actuator_violation": False,  # Disable termination, use reward penalty only
-        "actuator_violation_termination_threshold": 5.0,  # Higher threshold if enabled
 
         # Fall penalty thresholds (in degrees)
         "fall_roll_threshold": 25.0,   # Roll threshold for fall penalty (slightly less than termination)
@@ -168,23 +164,8 @@ def get_cfgs():
         "height_target": 0.25,  # Height maintenance target for neutral pose
         "movement_threshold": 2.0,  # Maximum movement reward threshold
         "movement_scale": 0.1,  # Scale factor for joint movement reward
-        "gait_amplitude": 0.4,   # The desired amplitude of the joint movement in radians
-        "gait_frequency": 0.6,   # The desired frequency of the gait in Hz
-        "gait_sigma": 0.25,      # The tolerance for the reward. Smaller values are stricter.
-
-        # Torso sinusoidal motion parameters
-        "torso_amplitude": 0.2,  # Smaller amplitude for torso sinusoidal motion (rad)
-        "torso_frequency": 0.3,  # Different frequency from leg gait (Hz)
-        "torso_phase": 1.732,      # Phase offset for torso motion
-        "torso_sigma": 0.25,     # Tolerance for torso sinusoidal reward
 
         "tracking_sigma": 0.25,
-
-        # Actuator constraint parameters - more lenient settings
-        "actuator_constraint_limit": 8.0,   # Increased from 6.16 to be more lenient
-        "actuator_torque_coeff": 3.5,       # Coefficient for torque in constraint
-        "actuator_tolerance": 1.0,           # Increased tolerance before penalty starts
-        "actuator_termination_threshold": 5.0,  # Higher violation level for termination
 
         # Enable/disable reward functions using if True/False
         "reward_enables": {
@@ -202,12 +183,7 @@ def get_cfgs():
             "height_maintenance": True,     # Height maintenance
 
             # Gait and movement rewards (reduced to prioritize command following)
-            "sinusoidal_gait": True,        # Leg sinusoidal gait
-            "torso_sinusoidal": True,       # Torso sinusoidal motion reward
             "joint_movement": True,         # Reward for joint movement
-
-            # Actuator constraint reward
-            "actuator_constraint": False,    # Penalty for actuator constraint violations
         },
 
         "reward_scales": {
@@ -225,12 +201,7 @@ def get_cfgs():
             "height_maintenance": -2.0,     # Height maintenance
 
             # Gait and movement rewards (reduced to prioritize command following)
-            "sinusoidal_gait": 2.0,         # Leg sinusoidal gait (reduced weight)
-            "torso_sinusoidal": 5.0,        # Torso sinusoidal motion reward (reduced weight)
             "joint_movement": 1.0,          # Reward for joint movement (reduced weight)
-
-            # Actuator constraint reward
-            "actuator_constraint": -2.0,    # Reduced penalty for more exploration
         },
     }
 
