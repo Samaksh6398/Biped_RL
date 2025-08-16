@@ -1,4 +1,3 @@
-# biped_train.py (Corrected and Cleaned)
 
 import argparse
 import os
@@ -6,276 +5,180 @@ import pickle
 import shutil
 import signal
 import sys
-import time
-from importlib import metadata
+import torch as th # Use 'th' alias for clarity when mixing with 'torch' from genesis
 
 import wandb
-import torch
-import torch.nn as nn
-from torch.utils.tensorboard import SummaryWriter
+from stable_baselines3.common.callbacks import CheckpointCallback
+from sb3_contrib import RecurrentPPO
 
-try:
-    try:
-        if metadata.version("rsl-rl"):
-            raise ImportError
-    except metadata.PackageNotFoundError:
-        if metadata.version("rsl-rl-lib") != "2.2.4":
-            raise ImportError
-except (metadata.PackageNotFoundError, ImportError) as e:
-    raise ImportError("Please uninstall 'rsl_rl' and install 'rsl-rl-lib==2.2.4'.") from e
-
-import genesis as gs
-
-from biped_env import BipedEnv
-from biped_config import get_cfgs, get_train_cfg
-from ppo_lstm_policy import ActorCriticLSTM, PPOLSTMAgent
-
-
-class LSTMPPORunner:
-    def __init__(self, env, train_cfg, log_dir, device='cuda'):
-        self.env = env
-        self.train_cfg = train_cfg
-        self.log_dir = log_dir
-        self.device = device
-        
-        # Create policy
-        self.policy = ActorCriticLSTM(
-            num_obs=env.num_obs,
-            num_actions=env.num_actions,
-            **train_cfg["policy"]
-        ).to(device)
-        
-        # Create PPO agent
-        self.agent = PPOLSTMAgent(
-            policy=self.policy,
-            device=device,
-            num_envs=env.num_envs,
-            **train_cfg["algorithm"]
-        )
-        
-        # Initialize LSTM states
-        self.lstm_states = self.policy.init_hidden(env.num_envs, device)
-        self.masks = torch.ones(env.num_envs, 1, device=device)
-        
-        # Logging
-        self.writer = SummaryWriter(log_dir=log_dir)
-        self.tot_timesteps = 0
-        self.tot_time = 0
-        
-        # Statistics
-        self.ep_infos = []
-
-    def learn(self, num_learning_iterations, init_at_random_ep_len=True):
-        """Main training loop"""
-        
-        # Initialize environment
-        obs, infos = self.env.reset()
-        if init_at_random_ep_len:
-            self.env.episode_length_buf[:] = torch.randint(
-                0, self.env.max_episode_length, (self.env.num_envs,), device=self.device
-            )
-        
-        current_iter = 0
-        for it in range(current_iter, num_learning_iterations):
-            start_time = time.time()
-            
-            # Collect rollout
-            self.collect_rollout(obs)
-            
-            # Update policy and get the mean losses for logging
-            mean_losses = self.agent.update()
-            
-            # Get new observations after policy update
-            obs, infos = self.env.get_observations()
-            
-            # Log all training info
-            self.log_training_info(it, time.time() - start_time, mean_losses)
-            
-            # Save model periodically
-            if it % self.train_cfg["save_interval"] == 0:
-                self.save(os.path.join(self.log_dir, f"model_{it}.pt"))
-                
-        # Save final model
-        self.save(os.path.join(self.log_dir, f"model_{num_learning_iterations}.pt"))
-    
-    def collect_rollout(self, obs):
-        """Collect rollout data with LSTM states"""
-        
-        self.agent.storage.step = 0
-        self.agent.storage.observations[0].copy_(obs)
-        self.agent.storage.lstm_hidden_states[0].copy_(self.lstm_states[0])
-        self.agent.storage.lstm_cell_states[0].copy_(self.lstm_states[1])
-        self.agent.storage.masks[0].copy_(self.masks)
-        
-        for step in range(self.agent.num_steps_per_env):
-            with torch.no_grad():
-                actions, log_probs, values, new_lstm_states, _ = self.policy(
-                    obs, self.lstm_states, self.masks
-                )
-            
-            obs, rewards, dones, infos, new_masks = self.env.step_lstm(actions, self.lstm_states, self.masks)
-            
-            self.agent.storage.insert(
-                obs=obs, actions=actions, rewards=rewards, values=values,
-                log_probs=log_probs, lstm_states=self.lstm_states, masks=self.masks
-            )
-            
-            self.lstm_states = new_lstm_states
-            self.masks = new_masks
-            
-            reset_indices = dones.nonzero(as_tuple=False).reshape(-1)
-            if len(reset_indices) > 0:
-                self.lstm_states[0][:, reset_indices, :] = 0.0
-                self.lstm_states[1][:, reset_indices, :] = 0.0
-            
-            if 'episode' in infos:
-                self.ep_infos.append(infos['episode'])
-            
-            self.tot_timesteps += self.env.num_envs
-
-    def log_training_info(self, iteration, step_time, losses):
-        """Log training statistics"""
-        
-        if len(self.ep_infos) > 0:
-            for key in self.ep_infos[0].keys():
-                values = [ep_info[key] for ep_info in self.ep_infos if key in ep_info]
-                if values:
-                    mean_value = sum(values) / len(values)
-                    self.writer.add_scalar(f'Episode/{key}', mean_value, iteration)
-        
-        self.ep_infos.clear()
-
-        for key, value in losses.items():
-            self.writer.add_scalar(f'Loss/{key}', value, iteration)
-        
-        self.writer.add_scalar('Training/iteration_time', step_time, iteration)
-        self.writer.add_scalar('Training/total_timesteps', self.tot_timesteps, iteration)
-        
-        if iteration % 10 == 0:
-            print(f"Iteration {iteration: <5} | Total Timesteps: {self.tot_timesteps: <8} | Step Time: {step_time:.3f}s")
-    
-    def save(self, path):
-        """Save model and optimizer state"""
-        torch.save({
-            'model_state_dict': self.policy.state_dict(),
-            'optimizer_state_dict': self.agent.optimizer.state_dict(),
-            'tot_timesteps': self.tot_timesteps,
-        }, path)
-        print(f"Model saved to {path}")
-    
-    def load(self, path):
-        """Load model and optimizer state"""
-        checkpoint = torch.load(path, map_location=self.device)
-        self.policy.load_state_dict(checkpoint['model_state_dict'])
-        if 'optimizer_state_dict' in checkpoint:
-            self.agent.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-        self.tot_timesteps = checkpoint.get('tot_timesteps', 0)
-        print(f"Model loaded from {path}. Resuming at timestep {self.tot_timesteps}.")
-    
-    def get_inference_policy(self, device=None):
-        """Get policy for inference"""
-        if device is not None:
-            self.policy = self.policy.to(device)
-        
-        from biped_eval import InferencePolicyLSTM
-        return InferencePolicyLSTM(self.policy, device or self.device)
+import genesis as gs # Ensure genesis is initialized
+from biped_env import BipedVecEnv # Import the new VecEnv wrapper
+from biped_config import get_cfgs # Get environment-specific configurations
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("-e", "--exp_name", type=str, default="biped-walking-lstm")
+    parser.add_argument("-e", "--exp_name", type=str, default="biped-walking-sb3-recurrentppo")
     parser.add_argument("-B", "--num_envs", type=int, default=1024)
-    parser.add_argument("--max_iterations", type=int, default=10000)
+    parser.add_argument("--total_timesteps", type=int, default=100_000_000, help="Total timesteps for training.")
 
     parser.add_argument("--wandb", action="store_true", help="Enable Weights & Biases logging.")
-    parser.add_argument("--wandb_project", type=str, default="biped-rl", help="W&B project name.")
+    parser.add_argument("--wandb_project", type=str, default="biped-rl-sb3", help="W&B project name.")
     parser.add_argument("--wandb_entity", type=str, default=None, help="W&B entity (user or team).")
     parser.add_argument("--wandb_run_name", type=str, default=None, help="A name for this specific W&B run.")
 
     args = parser.parse_args()
 
-    # --- THIS IS WHERE THE ERROR WAS ---
-    # The 'gs' object is defined by the import at the top of the file
+    # Initialize Genesis simulator first (critical for device setup)
     gs.init(logging_level="warning")
 
     log_dir = f"logs/{args.exp_name}"
     
-    env_cfg, obs_cfg, reward_cfg, command_cfg = get_cfgs()
-    train_cfg = get_train_cfg(args.exp_name, args.max_iterations)
-    
-    train_cfg["algorithm"]["num_steps_per_env"] = 32
-    train_cfg["algorithm"]["learning_rate"] = 3e-4
-
-    if 'learning_rate' in train_cfg['algorithm']:
-        train_cfg['algorithm']['lr'] = train_cfg['algorithm']['learning_rate']
-        del train_cfg['algorithm']['learning_rate']
-
-    if 'num_mini_batches' in train_cfg['algorithm']:
-        batch_size = args.num_envs * train_cfg['algorithm']['num_steps_per_env']
-        mini_batch_size = max(batch_size // train_cfg['algorithm']['num_mini_batches'], 1)
-        train_cfg['algorithm']['mini_batch_size'] = mini_batch_size
-        del train_cfg['algorithm']['num_mini_batches']
-    else:
-        train_cfg['algorithm']['mini_batch_size'] = 256
-    
-    train_cfg["policy"] = {
-        "actor_hidden_dims": [512, 256],
-        "critic_hidden_dims": [512, 256],
-        "lstm_hidden_size": 256,
-        "lstm_num_layers": 1,
-        "activation": "elu",
-        "init_noise_std": 1.0
-    }
-    
-    train_cfg["save_interval"] = 100 # Add save interval to config
-
-    if args.wandb:
-        wandb.init(
-            project=args.wandb_project,
-            entity=args.wandb_entity,
-            name=args.wandb_run_name or args.exp_name,
-            config=train_cfg,
-            sync_tensorboard=True,
-            monitor_gym=True,
-            save_code=True,
-        )
-        print(f"W&B logging enabled. Syncing TensorBoard logs from: {log_dir}")
-
+    # Clean previous logs for a fresh run
     if os.path.exists(log_dir):
         shutil.rmtree(log_dir)
     os.makedirs(log_dir, exist_ok=True)
 
-    pickle.dump(
-        [env_cfg, obs_cfg, reward_cfg, command_cfg, train_cfg],
-        open(f"{log_dir}/cfgs.pkl", "wb"),
+    # Get environment configurations
+    env_cfg, obs_cfg, reward_cfg, command_cfg = get_cfgs()
+    
+    # Save environment configs for later inspection/evaluation
+    pickle.dump([env_cfg, obs_cfg, reward_cfg, command_cfg], open(f"{log_dir}/cfgs.pkl", "wb"))
+
+    # Create the vectorized environment using the SB3-compatible wrapper
+    env = BipedVecEnv(
+        num_envs=args.num_envs, 
+        env_cfg=env_cfg, 
+        obs_cfg=obs_cfg, 
+        reward_cfg=reward_cfg, 
+        command_cfg=command_cfg,
+        show_viewer=False, # Set to True for one environment to visualize during training
+        device=gs.device # Pass Genesis device to the environment wrapper
     )
 
-    env = BipedEnv(
-        num_envs=args.num_envs, env_cfg=env_cfg, obs_cfg=obs_cfg, reward_cfg=reward_cfg, command_cfg=command_cfg
+    # --- Stable Baselines3 RecurrentPPO Configuration ---
+    # These parameters are chosen to be roughly equivalent to the original rsl-rl config
+    n_steps = 32 # Number of steps each environment takes before a policy update
+    # Batch size and mini-batch size calculations from original config logic:
+    # `num_steps_per_env` in rsl-rl is `n_steps` in SB3.
+    # `num_mini_batches` in rsl-rl is implicitly handled by `batch_size` and `n_epochs` in SB3.
+    # If original had 4 mini-batches, then SB3's batch_size should be (num_envs * n_steps) // 4.
+    batch_size = (args.num_envs * n_steps) // 4 # Total number of samples per policy update step
+    
+    # Policy kwargs specific for MlpLstmPolicy to mimic original network structure
+    policy_kwargs = dict(
+        activation_fn=th.nn.ELU, # Use ELU activation
+        # net_arch defines the MLP layers before and after the LSTM
+        # Example: [dict(pi=[512, 256], vf=[512, 256])] for separate actor/critic MLPs
+        # Here, `net_arch` specifies layers *before* LSTM for both actor and critic
+        # which is somewhat different from the rsl-rl structure.
+        # SB3 `MlpLstmPolicy`'s `net_arch` is applied to observations BEFORE LSTM, and then
+        # an additional MLP is applied AFTER LSTM.
+        # To mimic [512, 256] actor/critic hidden dims, and [256, 128] encoder,
+        # we set `net_arch` for the encoder part.
+        # The `lstm_hidden_size` and `n_lstm_layers` are direct mappings.
+        net_arch=[dict(pi=[256, 128], vf=[256, 128])], # For the observation encoder
+        lstm_hidden_size=256,
+        n_lstm_layers=1,
+        # Default initialization for SB3 is usually good.
+        # Initial log_std is usually set via `log_std_init` in PPO if needed, not directly in policy_kwargs.
+        # It's not a direct 1:1 mapping for `init_noise_std`.
     )
 
-    runner = LSTMPPORunner(env, train_cfg, log_dir, device=gs.device)
+    # Callbacks for model saving and optional W&B logging
+    # Save a model every 500,000 timesteps (or more frequently if num_envs * n_steps is large)
+    save_freq_steps = max(500_000 // args.num_envs, n_steps) 
+    checkpoint_callback = CheckpointCallback(
+        save_freq=save_freq_steps, # Frequency in timesteps
+        save_path=log_dir,
+        name_prefix="biped_model",
+        save_replay_buffer=False, # No replay buffer for on-policy PPO
+        save_vecnormalize=False, # Not using VecNormalize currently
+    )
+    callbacks = [checkpoint_callback]
 
+    if args.wandb:
+        from wandb.integration.sb3 import WandbCallback
+        run = wandb.init(
+            project=args.wandb_project,
+            entity=args.wandb_entity,
+            name=args.wandb_run_name or args.exp_name,
+            sync_tensorboard=True, # Sync SB3's TensorBoard logs to W&B
+            monitor_gym=True,      # Monitor Gymnasium environments
+            save_code=True,        # Save code to W&B
+            config={               # Log SB3 hyperparameters to W&B config
+                "n_steps": n_steps,
+                "batch_size": batch_size,
+                "n_epochs": 5,
+                "gamma": 0.99,
+                "gae_lambda": 0.95,
+                "clip_range": 0.2,
+                "ent_coef": 0.01,
+                "vf_coef": 1.0,
+                "learning_rate": 3e-4,
+                "max_grad_norm": 1.0,
+                "policy_type": "MlpLstmPolicy",
+                "policy_kwargs_net_arch_pi": policy_kwargs['net_arch'][0]['pi'],
+                "policy_kwargs_net_arch_vf": policy_kwargs['net_arch'][0]['vf'],
+                "policy_kwargs_lstm_hidden_size": policy_kwargs['lstm_hidden_size'],
+                "policy_kwargs_n_lstm_layers": policy_kwargs['n_lstm_layers'],
+                **env_cfg # Log environment config as well
+            }
+        )
+        wandb_callback = WandbCallback(
+            model_save_path=f"models/{run.id}", # Save models to W&B's run directory
+            verbose=2,
+        )
+        callbacks.append(wandb_callback)
+    
+    # Create the RecurrentPPO model
+    model = RecurrentPPO(
+        "MlpLstmPolicy", # Policy type
+        env,             # Environment
+        verbose=1,       # Log progress to stdout
+        n_steps=n_steps, # Number of steps to run for each environment per update
+        batch_size=batch_size, # Number of samples in a batch for training
+        n_epochs=5,      # Number of PPO training epochs
+        gamma=0.99,      # Discount factor
+        gae_lambda=0.95, # Factor for Generalized Advantage Estimator
+        clip_range=0.2,  # PPO clipping parameter
+        ent_coef=0.01,   # Entropy coefficient for exploration
+        vf_coef=1.0,     # Value function loss coefficient
+        learning_rate=3e-4, # Learning rate
+        max_grad_norm=1.0,  # Gradient clipping
+        policy_kwargs=policy_kwargs, # Policy network specific arguments
+        tensorboard_log=log_dir, # Log to TensorBoard (also synced to W&B if enabled)
+        device=gs.device # Use the same device as Genesis
+    )
+
+    # Signal handler for graceful interruption (Ctrl+C)
     def signal_handler(sig, frame):
         print('\n\nTraining interrupted by user (Ctrl+C)')
         print('Saving current model...')
-        runner.save(os.path.join(log_dir, "model_interrupted.pt"))
+        model.save(os.path.join(log_dir, "model_interrupted.zip"))
         if args.wandb:
             wandb.finish()
         sys.exit(0)
     
     signal.signal(signal.SIGINT, signal_handler)
-    
-    print(f"Starting training... Press Ctrl+C to stop and save the model.")
+
+    print(f"Starting training for {args.total_timesteps} timesteps...")
     print(f"Logs will be saved to: {log_dir}")
-    
+    print(f"Press Ctrl+C to stop and save the model.")
+
     try:
-        runner.learn(num_learning_iterations=args.max_iterations, init_at_random_ep_len=True)
+        model.learn(
+            total_timesteps=args.total_timesteps,
+            callback=callbacks,
+            progress_bar=True, # Show a progress bar during training
+        )
     except Exception as e:
         print(f'\nTraining stopped due to error: {e}')
         raise
     finally:
-        print('Final model save completed.')
+        # Save final model regardless of interruption or completion
+        model.save(os.path.join(log_dir, "model_final.zip"))
+        print('Training finished. Final model saved.')
         if args.wandb:
             wandb.finish()
 

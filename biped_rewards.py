@@ -1,5 +1,3 @@
-# biped_rewards.py (Corrected)
-
 import torch
 import numpy as np
 import genesis as gs
@@ -17,8 +15,8 @@ class RewardHandler:
         self.env_cfg = self.env.env_cfg
         self.device = self.env.device
         
-        # --- FIX: Initialize the attribute ---
-        self.reward_components = {}
+        # Initialize the attribute for reward components
+        self.reward_components = {} # Corrected: ensure this is initialized
 
         # prepare reward functions and multiply reward scales by dt
         self.reward_functions = dict()
@@ -27,11 +25,11 @@ class RewardHandler:
             self.reward_functions[name] = getattr(self, "_reward_" + name)
 
     def compute_rewards(self):
-        # --- START OF FIX ---
-        # This is the corrected logic. We now populate self.reward_components
-        # which makes the RewardHandler self-contained and fixes the AttributeError.
-        
-        self.env.rew_buf[:] = 0.0
+        """
+        Calculates all reward components and sums them into the environment's reward buffer.
+        Also tracks scaled reward components for logging.
+        """
+        self.env.rew_buf.zero_()
         self.reward_components.clear() # Clear at the start of each step
 
         for name, reward_func in self.reward_functions.items():
@@ -40,8 +38,8 @@ class RewardHandler:
                 # 1. Calculate the raw reward value
                 raw_rew = reward_func()
                 
-                # 2. Store the raw, unscaled reward for potential debugging
-                self.reward_components[name] = raw_rew
+                # 2. Store the raw, unscaled reward for potential debugging (optional, but good practice)
+                # self.reward_components[name] = raw_rew # If you want to track raw components
                 
                 # 3. Scale the reward for use
                 scaled_rew = raw_rew * self.reward_scales[name]
@@ -52,7 +50,6 @@ class RewardHandler:
                 # 5. Add the scaled reward to the episode sums for logging
                 if name in self.env.episode_sums:
                     self.env.episode_sums[name] += scaled_rew
-        # --- END OF FIX ---
 
     def _reward_lin_vel_z(self):
         return torch.square(self.env.base_lin_vel[:, 2])
@@ -85,28 +82,27 @@ class RewardHandler:
 
     def _reward_fall_penalty(self):
         fall_condition = (
-            (torch.abs(self.env.base_euler[:, 0]) > self.env_cfg.get("fall_roll_threshold", 30.0)) |  # Roll > 30 degrees
-            (torch.abs(self.env.base_euler[:, 1]) > self.env_cfg.get("fall_pitch_threshold", 30.0))   # Pitch > 30 degrees
+            (torch.abs(self.env.base_euler[:, 0]) > self.env_cfg.get("fall_roll_threshold", 30.0)) |
+            (torch.abs(self.env.base_euler[:, 1]) > self.env_cfg.get("fall_pitch_threshold", 30.0))
         )
         return torch.where(
             fall_condition,
-            torch.ones((self.env.num_envs,), device=self.device, dtype=gs.tc_float),  # Apply penalty
-            torch.zeros((self.env.num_envs,), device=self.device, dtype=gs.tc_float)  # No penalty
+            torch.ones((self.env.num_envs,), device=self.device, dtype=gs.tc_float),
+            torch.zeros((self.env.num_envs,), device=self.device, dtype=gs.tc_float)
         )
 
     def _reward_torso_stability(self):
-        orientation_error = torch.sum(torch.square(self.env.base_euler[:, :2]), dim=1)  # φ² + θ² (roll² + pitch²)
+        orientation_error = torch.sum(torch.square(self.env.base_euler[:, :2]), dim=1)
         k_stability = self.reward_cfg.get("stability_factor", 1.0)
         return torch.exp(-k_stability * orientation_error)
 
     def _reward_height_maintenance(self):
         z_target = self.reward_cfg.get("height_target", 0.35)
         height_error = torch.square(z_target - self.env.base_pos[:, 2])
-        return -height_error  # Return negative error (will be scaled by negative weight in config)
+        return -height_error
 
     def _reward_joint_movement(self):
         joint_vel_magnitude = torch.sum(torch.abs(self.env.dof_vel), dim=1)
         movement_threshold = self.reward_cfg.get("movement_threshold", 0.1)
         movement_scale = self.reward_cfg.get("movement_scale", 1.0)
-
         return torch.clamp(joint_vel_magnitude * movement_scale, 0.0, movement_threshold)
