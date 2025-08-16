@@ -2313,7 +2313,7 @@
     <child
       link="servo1" />
     <axis
-      xyz="1 0 0" />
+      xyz="0 0 1" />
     <limit
       lower="-1.732"
       upper="1.732"
@@ -2627,7 +2627,7 @@
   </link>
   <joint
     name="cfpipe1tobaselink"
-    type="continuous">
+    type="fixed">
     <origin
       xyz="0 0 0"
       rpy="0 0 0" />

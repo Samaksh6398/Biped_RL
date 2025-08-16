@@ -24,7 +24,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-e", "--exp_name", type=str, default="biped-walking-sb3-recurrentppo")
     parser.add_argument("-B", "--num_envs", type=int, default=1024)
-    parser.add_argument("--total_timesteps", type=int, default=100_000_000, help="Total timesteps for training.")
+    parser.add_argument("--total_timesteps", type=int, default=200_000_000, help="Total timesteps for training.")
 
     parser.add_argument("--wandb", action="store_true", help="Enable Weights & Biases logging.")
     parser.add_argument("--wandb_project", type=str, default="biped-rl-sb3", help="W&B project name.")
@@ -84,9 +84,9 @@ def main():
         # To mimic [512, 256] actor/critic hidden dims, and [256, 128] encoder,
         # we set `net_arch` for the encoder part.
         # The `lstm_hidden_size` and `n_lstm_layers` are direct mappings.
-        net_arch=[dict(pi=[256, 128], vf=[256, 128])], # For the observation encoder
-        lstm_hidden_size=256,
-        n_lstm_layers=1,
+        net_arch=[dict(pi=[512, 256, 128], vf=[512, 256, 128])], # For the observation encoder
+        lstm_hidden_size=512,
+        n_lstm_layers=2,
         # Default initialization for SB3 is usually good.
         # Initial log_std is usually set via `log_std_init` in PPO if needed, not directly in policy_kwargs.
         # It's not a direct 1:1 mapping for `init_noise_std`.
@@ -175,13 +175,13 @@ def main():
         verbose=1,       # Log progress to stdout
         n_steps=n_steps, # Number of steps to run for each environment per update
         batch_size=batch_size, # Number of samples in a batch for training
-        n_epochs=5,      # Number of PPO training epochs
+        n_epochs=10,      # Number of PPO training epochs
         gamma=0.99,      # Discount factor
         gae_lambda=0.95, # Factor for Generalized Advantage Estimator
         clip_range=0.2,  # PPO clipping parameter
         ent_coef=0.01,   # Entropy coefficient for exploration
         vf_coef=1.0,     # Value function loss coefficient
-        learning_rate=3e-4, # Learning rate
+        learning_rate=1e-4, # Learning rate
         max_grad_norm=1.0,  # Gradient clipping
         policy_kwargs=policy_kwargs, # Policy network specific arguments
         tensorboard_log=log_dir, # Log to TensorBoard (also synced to W&B if enabled)
