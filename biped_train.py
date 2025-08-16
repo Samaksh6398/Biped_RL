@@ -6,6 +6,8 @@ import shutil
 import signal
 import sys
 import torch as th # Use 'th' alias for clarity when mixing with 'torch' from genesis
+import numpy as np
+from collections import deque
 
 import wandb
 from stable_baselines3.common.callbacks import CheckpointCallback
@@ -14,6 +16,8 @@ from sb3_contrib import RecurrentPPO
 import genesis as gs # Ensure genesis is initialized
 from biped_env import BipedVecEnv # Import the new VecEnv wrapper
 from biped_config import get_cfgs # Get environment-specific configurations
+from adaptive_lr_callback import ImprovedKLAdaptiveLRCallback
+from wandb_reward_callback import WandbRewardCallback
 
 
 def main():
@@ -26,6 +30,9 @@ def main():
     parser.add_argument("--wandb_project", type=str, default="biped-rl-sb3", help="W&B project name.")
     parser.add_argument("--wandb_entity", type=str, default=None, help="W&B entity (user or team).")
     parser.add_argument("--wandb_run_name", type=str, default=None, help="A name for this specific W&B run.")
+
+    # Adaptive learning rate arguments
+    parser.add_argument("--adaptive_lr", action="store_true", help="Enable adaptive learning rate based on KL divergence.")
 
     args = parser.parse_args()
 
@@ -40,10 +47,10 @@ def main():
     os.makedirs(log_dir, exist_ok=True)
 
     # Get environment configurations
-    env_cfg, obs_cfg, reward_cfg, command_cfg = get_cfgs()
+    env_cfg, obs_cfg, reward_cfg, command_cfg, adaptive_lr_cfg = get_cfgs()
     
     # Save environment configs for later inspection/evaluation
-    pickle.dump([env_cfg, obs_cfg, reward_cfg, command_cfg], open(f"{log_dir}/cfgs.pkl", "wb"))
+    pickle.dump([env_cfg, obs_cfg, reward_cfg, command_cfg, adaptive_lr_cfg], open(f"{log_dir}/cfgs.pkl", "wb"))
 
     # Create the vectorized environment using the SB3-compatible wrapper
     env = BipedVecEnv(
@@ -97,6 +104,20 @@ def main():
     )
     callbacks = [checkpoint_callback]
 
+    # Add adaptive learning rate callback if enabled
+    if args.adaptive_lr:
+        adaptive_lr_callback = ImprovedKLAdaptiveLRCallback(
+            target_kl=adaptive_lr_cfg["target_kl"],
+            lr_factor=adaptive_lr_cfg["lr_factor"],
+            patience=adaptive_lr_cfg["patience"],
+            smoothing_window=adaptive_lr_cfg["smoothing_window"],
+            min_lr=adaptive_lr_cfg["min_lr"],
+            adaptation_threshold=adaptive_lr_cfg["adaptation_threshold"],
+            verbose=adaptive_lr_cfg["verbose"]
+        )
+        callbacks.append(adaptive_lr_callback)
+        print(f"Adaptive LR enabled: target_kl={adaptive_lr_cfg['target_kl']}, lr_factor={adaptive_lr_cfg['lr_factor']}")
+
     if args.wandb:
         from wandb.integration.sb3 import WandbCallback
         run = wandb.init(
@@ -122,6 +143,14 @@ def main():
                 "policy_kwargs_net_arch_vf": policy_kwargs['net_arch'][0]['vf'],
                 "policy_kwargs_lstm_hidden_size": policy_kwargs['lstm_hidden_size'],
                 "policy_kwargs_n_lstm_layers": policy_kwargs['n_lstm_layers'],
+                # Adaptive learning rate config
+                "adaptive_lr_enabled": args.adaptive_lr,
+                "target_kl": adaptive_lr_cfg["target_kl"] if args.adaptive_lr else None,
+                "lr_factor": adaptive_lr_cfg["lr_factor"] if args.adaptive_lr else None,
+                "lr_patience": adaptive_lr_cfg["patience"] if args.adaptive_lr else None,
+                "smoothing_window": adaptive_lr_cfg["smoothing_window"] if args.adaptive_lr else None,
+                "min_lr": adaptive_lr_cfg["min_lr"] if args.adaptive_lr else None,
+                "adaptation_threshold": adaptive_lr_cfg["adaptation_threshold"] if args.adaptive_lr else None,
                 **env_cfg # Log environment config as well
             }
         )
@@ -130,6 +159,14 @@ def main():
             verbose=2,
         )
         callbacks.append(wandb_callback)
+        
+        # Add custom reward logging callback
+        reward_callback = WandbRewardCallback(
+            log_freq=1000,      # Log aggregated stats every 1000 steps
+            mean_window=100,    # Calculate mean over last 100 episodes
+            verbose=1
+        )
+        callbacks.append(reward_callback)
     
     # Create the RecurrentPPO model
     model = RecurrentPPO(

@@ -482,18 +482,23 @@ class BipedVecEnv(VecEnv):
         Returns a list of info dictionaries, one for each environment.
         This is where episode statistics are extracted from biped_env.extras.
         """
+        # Initialize empty info dicts for all environments
+        infos = [{} for _ in range(self.num_envs)]
+        
         # Collect episode info that was populated by biped_env.reset_idx
-        infos = []
-        if 'episode' in self.biped_env.extras:
-            infos.extend(self.biped_env.extras['episode'])
+        if 'episode' in self.biped_env.extras and len(self.biped_env.extras['episode']) > 0:
+            episode_infos = self.biped_env.extras['episode']
+            
+            # Map episode info to the correct environment index
+            # Since we know episodes completed, we need to match them to done environments
+            # For now, assign episode info to the first few environments that had episodes complete
+            # This is a simplification - ideally we'd track which env_idx each episode belongs to
+            for idx, ep_info in enumerate(episode_infos):
+                if idx < self.num_envs:
+                    # SB3 expects episode info under an 'episode' key
+                    infos[idx]['episode'] = ep_info
+            
             self.biped_env.extras['episode'].clear() # Clear after reading
-
-        # Pad with empty dicts for environments that did not reset
-        # This is important for VecEnv consistency: it always expects num_envs info dicts.
-        # This assumes that `infos` list contains info only for environments that reset.
-        num_missing_infos = self.num_envs - len(infos)
-        for _ in range(num_missing_infos):
-            infos.append({})
             
         return infos
 

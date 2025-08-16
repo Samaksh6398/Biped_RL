@@ -148,4 +148,16 @@ def get_cfgs():
         "ang_vel_range": [0.0, 0.0],
     }
 
-    return env_cfg, obs_cfg, reward_cfg, command_cfg
+    adaptive_lr_cfg = {
+        # Adaptive Learning Rate Configuration
+        # These parameters control the KL-divergence based learning rate adaptation
+        "target_kl": 0.015,           # Target KL divergence threshold
+        "lr_factor": 0.8,            # Factor to multiply LR (< 1.0 for reduction, > 1.0 for increase)
+        "patience": 5,               # Number of consecutive violations before adapting
+        "smoothing_window": 5,      # Window size for smoothing KL values to reduce noise
+        "min_lr": 1e-6,             # Minimum learning rate (prevents lr from going too low)
+        "adaptation_threshold": 0.8, # Fraction of target_kl to trigger LR increase (0.8 * target_kl)
+        "verbose": 0                 # Verbosity level (0=silent, 1=basic logging, 2=detailed)
+    }
+
+    return env_cfg, obs_cfg, reward_cfg, command_cfg, adaptive_lr_cfg
