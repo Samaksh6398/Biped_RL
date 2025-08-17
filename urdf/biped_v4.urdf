@@ -205,8 +205,8 @@
     <limit
       lower="-1.732"
       upper="1.732"
-      effort="3.7"
-      velocity="10" />
+      effort="4"
+      velocity="2" />
   </joint>
   <link
     name="fix_leftfemur1_2">
@@ -316,8 +316,8 @@
     <limit
       lower="-1.732"
       upper="1.732"
-      effort="3.7"
-      velocity="10" />
+      effort="4"
+      velocity="2" />
   </joint>
   <link
     name="fix_left_femur2_2">
@@ -427,8 +427,8 @@
     <limit
       lower="-2"
       upper="2"
-      effort="5"
-      velocity="10" />
+      effort="4"
+      velocity="2" />
   </joint>
   <link
     name="fix_lefttibia_1">
@@ -539,7 +539,7 @@
       lower="-1.732"
       upper="1.732"
       effort="1.5"
-      velocity="10" />
+      velocity="3" />
   </joint>
   <link
     name="fixed_left_sensor_motor">
@@ -1285,8 +1285,8 @@
     <limit
       lower="-1.732"
       upper="1.732"
-      effort="3.7"
-      velocity="10" />
+      effort="4"
+      velocity="2" />
   </joint>
   <link
     name="fix_right_femer1_2">
@@ -1396,8 +1396,8 @@
     <limit
       lower="-1.732"
       upper="1.732"
-      effort="3.7"
-      velocity="10" />
+      effort="4"
+      velocity="2" />
   </joint>
   <link
     name="fix_right_femur2_2">
@@ -1507,8 +1507,8 @@
     <limit
       lower="-2"
       upper="2"
-      effort="5"
-      velocity="10" />
+      effort="4"
+      velocity="2" />
   </joint>
   <link
     name="fix_righttibia_1">
@@ -1619,7 +1619,7 @@
       lower="-1.732"
       upper="1.732"
       effort="1.5"
-      velocity="10" />
+      velocity="2" />
   </joint>
   <link
     name="fixed_right_sensor_motor">
@@ -2317,8 +2317,8 @@
     <limit
       lower="-1.732"
       upper="1.732"
-      effort="13"
-      velocity="10" />
+      effort="4"
+      velocity="2" />
   </joint>
   <link
     name="fix_torsolink1">
