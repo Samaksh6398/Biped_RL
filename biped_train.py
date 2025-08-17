@@ -25,6 +25,10 @@ def main():
     parser.add_argument("-e", "--exp_name", type=str, default="biped-walking-sb3-recurrentppo")
     parser.add_argument("-B", "--num_envs", type=int, default=1024)
     parser.add_argument("--total_timesteps", type=int, default=200_000_000, help="Total timesteps for training.")
+    
+    # Model loading arguments
+    parser.add_argument("--load_model", type=str, default=None, help="Path to saved model to continue training from")
+    parser.add_argument("--continue_training", action="store_true", help="Continue training from the latest model")
 
     parser.add_argument("--wandb", action="store_true", help="Enable Weights & Biases logging.")
     parser.add_argument("--wandb_project", type=str, default="biped-rl-sb3", help="W&B project name.")
@@ -41,9 +45,10 @@ def main():
 
     log_dir = f"logs/{args.exp_name}"
     
-    # Clean previous logs for a fresh run
-    if os.path.exists(log_dir):
-        shutil.rmtree(log_dir)
+    # Clean previous logs only for fresh runs (not when continuing training)
+    if not (args.continue_training or args.load_model):
+        if os.path.exists(log_dir):
+            shutil.rmtree(log_dir)
     os.makedirs(log_dir, exist_ok=True)
 
     # Get environment configurations
@@ -187,6 +192,38 @@ def main():
         tensorboard_log=log_dir, # Log to TensorBoard (also synced to W&B if enabled)
         device=gs.device # Use the same device as Genesis
     )
+
+    # LOAD SAVED MODEL IF SPECIFIED
+    if args.load_model:
+        if os.path.exists(args.load_model):
+            print(f"Loading model from: {args.load_model}")
+            model = RecurrentPPO.load(args.load_model, env=env, device=gs.device)
+            print("✓ Model loaded successfully!")
+        else:
+            print(f"Error: Model file not found: {args.load_model}")
+            sys.exit(1)
+    elif args.continue_training:
+        # Find the latest model automatically
+        model_files = []
+        if os.path.exists(log_dir):
+            for file in os.listdir(log_dir):
+                if file.endswith('.zip'):
+                    model_files.append(os.path.join(log_dir, file))
+        
+        if model_files:
+            # Sort by modification time to get the latest
+            latest_model = max(model_files, key=os.path.getmtime)
+            print(f"Continuing training from latest model: {latest_model}")
+            model = RecurrentPPO.load(latest_model, env=env, device=gs.device)
+            print("✓ Latest model loaded successfully!")
+        else:
+            print("No saved models found. Starting fresh training.")
+    
+    # Ensure we don't clear logs if continuing training
+    if args.continue_training or args.load_model:
+        print("📊 Continuing training - keeping existing logs")
+    else:
+        print("🆕 Starting fresh training")
 
     # Signal handler for graceful interruption (Ctrl+C)
     def signal_handler(sig, frame):
