@@ -11,8 +11,14 @@ import time
 from gymnasium import spaces
 from stable_baselines3.common.vec_env import VecEnv
 
-from biped_rewards import RewardHandler
+from biped_rewards import VectorizedRewardHandler
 from biped_domain_rand import DomainRandomizationHandler, gs_rand_float
+
+# Import torch compilation for performance optimization
+try:
+    import torch._dynamo as dynamo
+except ImportError:
+    dynamo = None
 
 
 class BipedEnv:
@@ -114,7 +120,7 @@ class BipedEnv:
         self.randomization_step_counter = 0
 
         # Initialize handlers
-        self.reward_handler = RewardHandler(self)
+        self.reward_handler = VectorizedRewardHandler(self)
         self.dr_handler = DomainRandomizationHandler(self)
 
         # prepare episode sums for logging
@@ -148,6 +154,9 @@ class BipedEnv:
         self.motor_backlash_direction = torch.ones((self.num_envs, self.num_actions), device=gs.device, dtype=gs.tc_float)
         self.last_motor_positions = torch.zeros_like(self.actions)
         
+        # Additional buffers for optimized motor backlash computation
+        self.temp_motor_buffer = torch.zeros_like(self.actions)
+        
         self.foot_contacts = torch.zeros((self.num_envs, 2), device=gs.device, dtype=gs.tc_float)
         self.foot_contacts_raw = torch.zeros((self.num_envs, 2), device=gs.device, dtype=gs.tc_float)
         
@@ -159,7 +168,38 @@ class BipedEnv:
         self.contact_delay_buffer = torch.zeros((self.num_envs, 2, 5), device=gs.device, dtype=gs.tc_float) # Buffer for 5 timesteps delay
         self.contact_delay_idx = torch.zeros((self.num_envs,), device=gs.device, dtype=torch.long)
         
+        # Performance optimization: Pre-compute joint indices for advanced indexing
+        self.hip_indices = torch.tensor([0, 1, 4, 5], device=self.device, dtype=torch.long)
+        self.knee_indices = torch.tensor([2, 6], device=self.device, dtype=torch.long)
+        self.ankle_indices = torch.tensor([3, 7], device=self.device, dtype=torch.long)
+        
+        # Pre-allocate tensors for observation components to reduce memory allocation
+        self.scaled_dof_pos = torch.zeros_like(self.actions)
+        self.scaled_dof_vel = torch.zeros_like(self.actions)
+        self.hip_angles = torch.zeros((self.num_envs, 4), device=self.device, dtype=gs.tc_float)
+        self.hip_velocities = torch.zeros((self.num_envs, 4), device=self.device, dtype=gs.tc_float)
+        self.knee_angles = torch.zeros((self.num_envs, 2), device=self.device, dtype=gs.tc_float)
+        self.knee_velocities = torch.zeros((self.num_envs, 2), device=self.device, dtype=gs.tc_float)
+        self.ankle_angles = torch.zeros((self.num_envs, 2), device=self.device, dtype=gs.tc_float)
+        self.ankle_velocities = torch.zeros((self.num_envs, 2), device=self.device, dtype=gs.tc_float)
+        
+        # Pre-allocate noise buffer matching observation shape for vectorized noise addition
+        self.full_noise_buffer = torch.zeros_like(self.obs_buf)
+        
         self.extras = {} # Used to pass info to SB3 VecEnv
+
+        # Setup compiled observation function for performance
+        if dynamo is not None:
+            try:
+                self.compute_observations_compiled = torch.compile(self.compute_observations_optimized, mode="max-autotune")
+                self._use_compiled_obs = True
+                print("Successfully compiled compute_observations for GPU optimization")
+            except Exception as e:
+                print(f"Warning: Could not compile compute_observations, falling back to regular version: {e}")
+                self._use_compiled_obs = False
+        else:
+            self._use_compiled_obs = False
+            print("Warning: torch._dynamo not available, using regular compute_observations")
 
     def _resample_commands(self, envs_idx):
         if len(envs_idx) > 0:
@@ -180,12 +220,17 @@ class BipedEnv:
         """
         self.randomization_step_counter += 1
         
-        self.actions = torch.clip(actions, -self.env_cfg["clip_actions"], self.env_cfg["clip_actions"])
+        # Optimized action clipping in-place
+        torch.clamp(actions, -self.env_cfg["clip_actions"], self.env_cfg["clip_actions"], out=self.actions)
         exec_actions = self.last_actions if self.simulate_action_latency else self.actions
         
         exec_actions = self.dr_handler.apply_on_step(exec_actions)
         
-        target_dof_pos = exec_actions * self.env_cfg["action_scale"] + self.default_dof_pos
+        # Optimized target position computation
+        torch.mul(exec_actions, self.env_cfg["action_scale"], out=self.scaled_dof_pos)
+        torch.add(self.scaled_dof_pos, self.default_dof_pos, out=self.scaled_dof_pos)
+        target_dof_pos = self.scaled_dof_pos
+        
         self.robot.control_dofs_position(target_dof_pos, self.motors_dof_idx)
         self.scene.step()
 
@@ -196,8 +241,8 @@ class BipedEnv:
 
         self.compute_observations() # Recalculate observations based on new state
 
-        self.last_actions[:] = self.actions[:]
-        self.last_dof_vel[:] = self.dof_vel[:]
+        self.last_actions.copy_(self.actions)
+        self.last_dof_vel.copy_(self.dof_vel)
         
         # Return PyTorch tensors directly; the VecEnv wrapper will convert to numpy
         return self.obs_buf, self.rew_buf, self.reset_buf, self.extras
@@ -250,11 +295,122 @@ class BipedEnv:
         self.reward_handler.compute_rewards()
         self.episode_sums["total_reward"] += self.rew_buf
 
+    def compute_observations_optimized(self):
+        """
+        Optimized observation computation with batched scaling, advanced indexing,
+        and vectorized noise addition for maximum performance.
+        """
+        # Batch compute scaled joint positions and velocities (reduces intermediate tensors)
+        torch.sub(self.dof_pos, self.default_dof_pos, out=self.scaled_dof_pos)
+        self.scaled_dof_pos *= self.obs_scales["dof_pos"]
+        torch.mul(self.dof_vel, self.obs_scales["dof_vel"], out=self.scaled_dof_vel)
+
+        # Advanced indexing for joint groups (single operations instead of multiple cats)
+        torch.index_select(self.scaled_dof_pos, 1, self.hip_indices, out=self.hip_angles)
+        torch.index_select(self.scaled_dof_vel, 1, self.hip_indices, out=self.hip_velocities)
+        torch.index_select(self.scaled_dof_pos, 1, self.knee_indices, out=self.knee_angles)
+        torch.index_select(self.scaled_dof_vel, 1, self.knee_indices, out=self.knee_velocities)
+        torch.index_select(self.scaled_dof_pos, 1, self.ankle_indices, out=self.ankle_angles)
+        torch.index_select(self.scaled_dof_vel, 1, self.ankle_indices, out=self.ankle_velocities)
+
+        # Clamp foot contacts in-place
+        foot_contacts_normalized = torch.clamp(self.foot_contacts, 0, 1)
+
+        # Single concatenation without noise first
+        obs_components = [
+            self.base_euler[:, :2] * self.obs_scales.get("base_euler", 1.0),
+            self.base_ang_vel[:, :2] * self.obs_scales["ang_vel"],
+            self.base_ang_vel[:, [2]] * self.obs_scales["ang_vel"],
+            self.base_lin_vel[:, :2] * self.obs_scales["lin_vel"],
+            self.base_pos[:, [2]] * self.obs_scales.get("base_height", 1.0),
+            self.commands[:, :3] * self.commands_scale,
+            self.hip_angles, self.hip_velocities,
+            self.knee_angles, self.knee_velocities,
+            self.ankle_angles, self.ankle_velocities,
+            foot_contacts_normalized, self.last_actions
+        ]
+        torch.cat(obs_components, dim=-1, out=self.obs_buf)
+
+        # Vectorized noise addition if enabled (single operation on the final obs)
+        if self.env_cfg["domain_rand"]["add_observation_noise"] and self.dr_handler._should_update_randomization('observation_noise'):
+            self.dr_handler._generate_noise_batch()
+            
+            # Zero out the noise buffer first
+            self.full_noise_buffer.zero_()
+            
+            # Populate sections of full_noise corresponding to each component
+            # Calculate offsets for each component in the observation vector
+            offset = 0
+            
+            # base_euler (2 elements)
+            self.full_noise_buffer[:, offset:offset+2] = self.noise_buffers['base_euler'][:, :2]
+            offset += 2
+            
+            # base_ang_vel xy (2 elements)
+            self.full_noise_buffer[:, offset:offset+2] = self.noise_buffers['ang_vel'][:, :2]
+            offset += 2
+            
+            # base_ang_vel z (1 element)
+            self.full_noise_buffer[:, offset:offset+1] = self.noise_buffers['ang_vel'][:, [2]]
+            offset += 1
+            
+            # base_lin_vel (2 elements)
+            self.full_noise_buffer[:, offset:offset+2] = self.noise_buffers['lin_vel'][:, :2]
+            offset += 2
+            
+            # base_pos z (1 element)
+            self.full_noise_buffer[:, offset:offset+1] = self.noise_buffers['base_pos'][:, [2]]
+            offset += 1
+            
+            # commands (3 elements) - no noise
+            offset += 3
+            
+            # hip_angles (4 elements)
+            self.full_noise_buffer[:, offset:offset+4] = self.noise_buffers['dof_pos'][:, :4]
+            offset += 4
+            
+            # hip_velocities (4 elements)
+            self.full_noise_buffer[:, offset:offset+4] = self.noise_buffers['dof_vel'][:, :4]
+            offset += 4
+            
+            # knee_angles (2 elements)
+            self.full_noise_buffer[:, offset:offset+2] = self.noise_buffers['dof_pos'][:, 4:6]
+            offset += 2
+            
+            # knee_velocities (2 elements)
+            self.full_noise_buffer[:, offset:offset+2] = self.noise_buffers['dof_vel'][:, 4:6]
+            offset += 2
+            
+            # ankle_angles (2 elements)
+            self.full_noise_buffer[:, offset:offset+2] = self.noise_buffers['dof_pos'][:, 6:8]
+            offset += 2
+            
+            # ankle_velocities (2 elements)
+            self.full_noise_buffer[:, offset:offset+2] = self.noise_buffers['dof_vel'][:, 6:8]
+            offset += 2
+            
+            # foot_contacts (2 elements)
+            self.full_noise_buffer[:, offset:offset+2] = self.noise_buffers['foot_contact']
+            offset += 2
+            
+            # last_actions (no noise)
+            
+            # Apply noise in a single operation and clamp the result
+            self.obs_buf += self.full_noise_buffer
+            
+            # Clamp foot contact observations to [0,1] after noise addition
+            foot_contact_start = offset - 2
+            torch.clamp(self.obs_buf[:, foot_contact_start:foot_contact_start+2], 0, 1, 
+                       out=self.obs_buf[:, foot_contact_start:foot_contact_start+2])
+
     def compute_observations(self):
         """
-        Calculates and updates the observation buffer (self.obs_buf).
-        Applies observation noise if enabled.
+        Legacy observation computation method. Use optimized version when possible.
         """
+        if self._use_compiled_obs:
+            return self.compute_observations_compiled()
+        
+        # Fallback to original implementation
         # Joint positions and velocities relative to default pose, scaled
         hip_angles = torch.cat([(self.dof_pos[:, [0, 1]] - self.default_dof_pos[[0, 1]]) * self.obs_scales["dof_pos"], (self.dof_pos[:, [4, 5]] - self.default_dof_pos[[4, 5]]) * self.obs_scales["dof_pos"]], dim=1)
         hip_velocities = torch.cat([self.dof_vel[:, [0, 1]] * self.obs_scales["dof_vel"], self.dof_vel[:, [4, 5]] * self.obs_scales["dof_vel"]], dim=1)
