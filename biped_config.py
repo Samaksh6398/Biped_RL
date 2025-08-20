@@ -51,6 +51,10 @@ def get_cfgs():
         "action_scale": 0.25,  # Conservative scaling
         "simulate_action_latency": True,
         "clip_actions": 100.0,
+        
+        # Foot contact observation settings
+        "binary_foot_contacts": True,  # Convert continuous contact forces to binary 0/1
+        "foot_contact_threshold": 0.1,  # Force threshold for binary contact detection
 
         # Domain Randomization Configuration
         "domain_rand": {

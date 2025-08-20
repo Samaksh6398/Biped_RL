@@ -281,6 +281,11 @@ class BipedEnv:
         else:
             self.foot_contacts = self.foot_contacts_raw.clone()
         
+        # Convert to binary contacts if enabled
+        if self.env_cfg.get("binary_foot_contacts", False):
+            contact_threshold = self.env_cfg.get("foot_contact_threshold", 0.1)
+            self.foot_contacts = (self.foot_contacts > contact_threshold).float()
+        
         # Resample commands periodically
         envs_idx_to_resample = ((self.episode_length_buf % int(self.env_cfg["resampling_time_s"] / self.dt) == 0)).nonzero(as_tuple=False).reshape((-1,))
         self._resample_commands(envs_idx_to_resample)
@@ -314,8 +319,13 @@ class BipedEnv:
         torch.index_select(self.scaled_dof_pos, 1, self.ankle_indices, out=self.ankle_angles)
         torch.index_select(self.scaled_dof_vel, 1, self.ankle_indices, out=self.ankle_velocities)
 
-        # Clamp foot contacts in-place
-        foot_contacts_normalized = torch.clamp(self.foot_contacts, 0, 1)
+        # Handle foot contacts (already binary if binary_foot_contacts is enabled)
+        if self.env_cfg.get("binary_foot_contacts", False):
+            # Contacts are already binary (0 or 1), no need to clamp
+            foot_contacts_normalized = self.foot_contacts
+        else:
+            # Legacy behavior: clamp continuous contacts to [0,1]
+            foot_contacts_normalized = torch.clamp(self.foot_contacts, 0, 1)
 
         # Single concatenation without noise first
         obs_components = [
@@ -399,10 +409,17 @@ class BipedEnv:
             # Apply noise in a single operation and clamp the result
             self.obs_buf += self.full_noise_buffer
             
-            # Clamp foot contact observations to [0,1] after noise addition
+            # Handle foot contact observations after noise addition
             foot_contact_start = offset - 2
-            torch.clamp(self.obs_buf[:, foot_contact_start:foot_contact_start+2], 0, 1, 
-                       out=self.obs_buf[:, foot_contact_start:foot_contact_start+2])
+            if self.env_cfg.get("binary_foot_contacts", False):
+                # For binary contacts, apply threshold after noise to maintain binary nature
+                contact_threshold = self.env_cfg.get("foot_contact_threshold", 0.1)
+                foot_contacts_noisy = self.obs_buf[:, foot_contact_start:foot_contact_start+2]
+                self.obs_buf[:, foot_contact_start:foot_contact_start+2] = (foot_contacts_noisy > contact_threshold).float()
+            else:
+                # Legacy behavior: clamp continuous contacts to [0,1]
+                torch.clamp(self.obs_buf[:, foot_contact_start:foot_contact_start+2], 0, 1, 
+                           out=self.obs_buf[:, foot_contact_start:foot_contact_start+2])
 
     def compute_observations(self):
         """
@@ -419,7 +436,14 @@ class BipedEnv:
         knee_velocities = torch.cat([self.dof_vel[:, [2]] * self.obs_scales["dof_vel"], self.dof_vel[:, [6]] * self.obs_scales["dof_vel"]], dim=1)
         ankle_angles = torch.cat([(self.dof_pos[:, [3]] - self.default_dof_pos[[3]]) * self.obs_scales["dof_pos"], (self.dof_pos[:, [7]] - self.default_dof_pos[[7]]) * self.obs_scales["dof_pos"]], dim=1)
         ankle_velocities = torch.cat([self.dof_vel[:, [3]] * self.obs_scales["dof_vel"], self.dof_vel[:, [7]] * self.obs_scales["dof_vel"]], dim=1)
-        foot_contacts_normalized = torch.clamp(self.foot_contacts, 0, 1)
+        
+        # Handle foot contacts (already binary if binary_foot_contacts is enabled)
+        if self.env_cfg.get("binary_foot_contacts", False):
+            # Contacts are already binary (0 or 1), no need to clamp
+            foot_contacts_normalized = self.foot_contacts
+        else:
+            # Legacy behavior: clamp continuous contacts to [0,1]
+            foot_contacts_normalized = torch.clamp(self.foot_contacts, 0, 1)
         
         # Apply observation noise if enabled
         if self.env_cfg["domain_rand"]["add_observation_noise"] and self.dr_handler._should_update_randomization('observation_noise'):
@@ -435,7 +459,16 @@ class BipedEnv:
             knee_velocities_noisy = knee_velocities + self.noise_buffers['dof_vel'][:, 4:6]
             ankle_angles_noisy = ankle_angles + self.noise_buffers['dof_pos'][:, 6:8]
             ankle_velocities_noisy = ankle_velocities + self.noise_buffers['dof_vel'][:, 6:8]
-            foot_contacts_noisy = torch.clamp(foot_contacts_normalized + self.noise_buffers['foot_contact'], 0, 1)
+            
+            # Handle foot contact noise based on binary vs continuous setting
+            if self.env_cfg.get("binary_foot_contacts", False):
+                # For binary contacts, apply threshold after adding noise
+                contact_threshold = self.env_cfg.get("foot_contact_threshold", 0.1)
+                foot_contacts_with_noise = foot_contacts_normalized + self.noise_buffers['foot_contact']
+                foot_contacts_noisy = (foot_contacts_with_noise > contact_threshold).float()
+            else:
+                # Legacy behavior: clamp continuous contacts to [0,1] after noise
+                foot_contacts_noisy = torch.clamp(foot_contacts_normalized + self.noise_buffers['foot_contact'], 0, 1)
         else:
             # Use un-noisy values if randomization is off
             base_euler_noisy, base_ang_vel_xy_noisy, base_ang_vel_z_noisy, base_lin_vel_noisy, base_pos_z_noisy = \
