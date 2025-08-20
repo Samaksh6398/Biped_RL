@@ -546,6 +546,9 @@ class BipedEnv:
         self.foot_contacts[envs_idx] = 0.0
         self.randomized_kp[envs_idx] = self.orig_kp
         
+        # Reset reward handler state for alternating foot contact tracking
+        self.reward_handler.reset(envs_idx)
+        
         self.episode_length_buf[envs_idx] = 0
         self.reset_buf[envs_idx] = 0 # Mark as not-resetting for the *next* step (0 = False, not done)
 

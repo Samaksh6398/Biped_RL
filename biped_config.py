@@ -1,7 +1,10 @@
 
 def get_cfgs():
     """
-    Returns the configuration dictionaries for the environment, observations, rewards, and commands.
+    Returns the configuration dictionaries for the environment, observations, rewards, and comma        # Foot alternation reward parameters
+        "contact_threshold": 1.0,
+        "short_sequence_reward": 0.5,
+        "long_sequence_reward": 1.0,
     This configuration remains unchanged as it is specific to the environment's internal logic.
     """
     env_cfg = {
@@ -119,6 +122,21 @@ def get_cfgs():
         "movement_threshold": 2.0,
         "movement_scale": 0.1,
 
+        # Foot alternation reward parameters
+        "contact_threshold": 1.0,
+        "short_sequence_reward": 0.5,
+        "long_sequence_reward": 1.0,
+        
+        # Sinusoidal motion reward parameters
+        "sinusoidal_coherence_scale": 1.0,  # Controls how sharply the reward falls off with incoherence. Higher is stricter.
+        "sinusoidal_joint_names": [
+            "revolute_torso",
+            "left_hip2",
+            "left_knee",
+            "right_hip2",
+            "right_knee"
+        ],
+
         "reward_enables": {
             "tracking_lin_vel_x": True,
             "tracking_lin_vel_y": True,
@@ -131,6 +149,8 @@ def get_cfgs():
             "height_maintenance": True,
             "joint_movement": True,
             "height_penalty": True,
+            "foot_alternation": True,
+            "sinusoidal_motion": True,
         },
 
         "reward_scales": {
@@ -145,6 +165,8 @@ def get_cfgs():
             "height_maintenance": -2.0,
             "joint_movement": 1.0,
             "height_penalty": -50.0,
+            "foot_alternation": 5.0,
+            "sinusoidal_motion": 0.5,
         },
     }
 
