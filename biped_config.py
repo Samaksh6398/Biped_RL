@@ -38,6 +38,7 @@ def get_cfgs():
         # termination conditions - tighter for biped
         "termination_if_roll_greater_than": 30,  # degree - bipeds can lean more
         "termination_if_pitch_greater_than": 30, # degree
+        "termination_if_height_below": 0.30,  # meters - terminate if base link height drops below this
 
         # Fall penalty thresholds (in degrees)
         "fall_roll_threshold": 25.0,   # Roll threshold for fall penalty (slightly less than termination)
@@ -125,6 +126,7 @@ def get_cfgs():
             "torso_stability": True,
             "height_maintenance": True,
             "joint_movement": True,
+            "height_penalty": True,
         },
 
         "reward_scales": {
@@ -138,6 +140,7 @@ def get_cfgs():
             "torso_stability": 5.0,
             "height_maintenance": -2.0,
             "joint_movement": 1.0,
+            "height_penalty": -50.0,
         },
     }
 

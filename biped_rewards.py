@@ -47,6 +47,11 @@ def compute_fall_condition(base_euler: torch.Tensor, fall_roll_threshold: float,
         torch.abs(base_euler[:, 1]) > fall_pitch_threshold
     )
 
+@torch.jit.script
+def compute_height_termination(base_pos: torch.Tensor, min_height_threshold: float):
+    """JIT compiled height-based termination detection."""
+    return base_pos[:, 2] < min_height_threshold
+
 class VectorizedRewardHandler:
     """
     Ultra-optimized reward handler with JIT compilation, mixed precision, and fused operations.
@@ -99,6 +104,7 @@ class VectorizedRewardHandler:
             'torso_stability': torch.zeros(num_envs, device=device),
             'height_maintenance': torch.zeros(num_envs, device=device),
             'joint_movement': torch.zeros(num_envs, device=device),
+            'height_penalty': torch.zeros(num_envs, device=device),
         }
         
         # Pre-allocated temporary tensors (reused across computations)
@@ -121,6 +127,7 @@ class VectorizedRewardHandler:
         self.movement_scale = self.reward_cfg.get("movement_scale", 1.0)
         self.fall_roll_threshold = self.env_cfg.get("fall_roll_threshold", 30.0)
         self.fall_pitch_threshold = self.env_cfg.get("fall_pitch_threshold", 30.0)
+        self.min_height_threshold = self.env_cfg.get("termination_if_height_below", 0.30)
 
     def compute_rewards(self):
         """
@@ -201,6 +208,18 @@ class VectorizedRewardHandler:
                 torch.tensor(1.0, device=self.device),
                 torch.tensor(0.0, device=self.device),
                 out=self.reward_buffers['fall_penalty']
+            )
+
+        # JIT COMPILED HEIGHT PENALTY (Prevents getting too low)
+        if self.reward_enables.get('height_penalty', True):
+            height_penalty_condition = compute_height_termination(
+                self.env.base_pos, self.min_height_threshold + 0.05  # Start penalty 5cm above termination
+            )
+            torch.where(
+                height_penalty_condition,
+                torch.tensor(1.0, device=self.device),
+                torch.tensor(0.0, device=self.device),
+                out=self.reward_buffers['height_penalty']
             )
 
         # SIMPLE REWARDS (Already optimized)
@@ -294,6 +313,10 @@ class VectorizedRewardHandler:
     def _reward_joint_movement(self):
         """Legacy compatibility - use vectorized version instead."""
         return self.reward_buffers['joint_movement']
+        
+    def _reward_height_penalty(self):
+        """Legacy compatibility - use vectorized version instead."""
+        return self.reward_buffers['height_penalty']
 
 
 # Keep the old RewardHandler for backward compatibility
