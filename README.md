@@ -20,7 +20,7 @@ A reinforcement learning framework for training bipedal robots using Genesis Phy
 conda activate genesis
 
 # OR create from scratch
-conda env create -f environment_minimal.yml
+conda env create -f environment.yml
 bash install_genesis.sh
 ```
 
