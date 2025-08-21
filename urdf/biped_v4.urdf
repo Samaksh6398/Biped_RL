@@ -26,7 +26,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/base_link.STL" />
+          filename="urdf/meshes/base_link.STL" />
       </geometry>
       <material
         name="">
@@ -40,7 +40,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/base_link.STL" />
+          filename="urdf/meshes/base_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -66,7 +66,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_leftlegtobaselink.STL" />
+          filename="/urdf/meshes/fix_leftlegtobaselink.STL" />
       </geometry>
       <material
         name="">
@@ -80,7 +80,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_leftlegtobaselink.STL" />
+          filename="/urdf/meshes/fix_leftlegtobaselink.STL" />
       </geometry>
     </collision>
   </link>
@@ -119,7 +119,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_lefthip1towaist.STL" />
+          filename="/urdf/meshes/fix_lefthip1towaist.STL" />
       </geometry>
       <material
         name="">
@@ -133,7 +133,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_lefthip1towaist.STL" />
+          filename="/urdf/meshes/fix_lefthip1towaist.STL" />
       </geometry>
     </collision>
   </link>
@@ -172,7 +172,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/revolute_left_femur1_1.STL" />
+          filename="/urdf/meshes/revolute_left_femur1_1.STL" />
       </geometry>
       <material
         name="">
@@ -186,7 +186,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/revolute_left_femur1_1.STL" />
+          filename="/urdf/meshes/revolute_left_femur1_1.STL" />
       </geometry>
     </collision>
   </link>
@@ -230,7 +230,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_leftfemur1_2.STL" />
+          filename="/urdf/meshes/fix_leftfemur1_2.STL" />
       </geometry>
       <material
         name="">
@@ -244,7 +244,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_leftfemur1_2.STL" />
+          filename="/urdf/meshes/fix_leftfemur1_2.STL" />
       </geometry>
     </collision>
   </link>
@@ -283,7 +283,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/revolute_left_femur2_1.STL" />
+          filename="/urdf/meshes/revolute_left_femur2_1.STL" />
       </geometry>
       <material
         name="">
@@ -297,7 +297,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/revolute_left_femur2_1.STL" />
+          filename="/urdf/meshes/revolute_left_femur2_1.STL" />
       </geometry>
     </collision>
   </link>
@@ -341,7 +341,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_left_femur2_2.STL" />
+          filename="/urdf/meshes/fix_left_femur2_2.STL" />
       </geometry>
       <material
         name="">
@@ -355,7 +355,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_left_femur2_2.STL" />
+          filename="/urdf/meshes/fix_left_femur2_2.STL" />
       </geometry>
     </collision>
   </link>
@@ -394,7 +394,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/revolute_left_knee.STL" />
+          filename="/urdf/meshes/revolute_left_knee.STL" />
       </geometry>
       <material
         name="">
@@ -408,7 +408,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/revolute_left_knee.STL" />
+          filename="/urdf/meshes/revolute_left_knee.STL" />
       </geometry>
     </collision>
   </link>
@@ -452,7 +452,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_lefttibia_1.STL" />
+          filename="/urdf/meshes/fix_lefttibia_1.STL" />
       </geometry>
       <material
         name="">
@@ -466,7 +466,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_lefttibia_1.STL" />
+          filename="/urdf/meshes/fix_lefttibia_1.STL" />
       </geometry>
     </collision>
   </link>
@@ -505,7 +505,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/revolute_leftfoot.STL" />
+          filename="/urdf/meshes/revolute_leftfoot.STL" />
       </geometry>
       <material
         name="">
@@ -519,7 +519,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/revolute_leftfoot.STL" />
+          filename="/urdf/meshes/revolute_leftfoot.STL" />
       </geometry>
     </collision>
   </link>
@@ -563,7 +563,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fixed_left_sensor_motor.STL" />
+          filename="/urdf/meshes/fixed_left_sensor_motor.STL" />
       </geometry>
       <material
         name="">
@@ -577,7 +577,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fixed_left_sensor_motor.STL" />
+          filename="/urdf/meshes/fixed_left_sensor_motor.STL" />
       </geometry>
     </collision>
   </link>
@@ -616,7 +616,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/revolute_left_sensorstick.STL" />
+          filename="/urdf/meshes/revolute_left_sensorstick.STL" />
       </geometry>
       <material
         name="">
@@ -630,7 +630,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/revolute_left_sensorstick.STL" />
+          filename="/urdf/meshes/revolute_left_sensorstick.STL" />
       </geometry>
     </collision>
   </link>
@@ -669,7 +669,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_lefttibia_2.STL" />
+          filename="/urdf/meshes/fix_lefttibia_2.STL" />
       </geometry>
       <material
         name="">
@@ -683,7 +683,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_lefttibia_2.STL" />
+          filename="/urdf/meshes/fix_lefttibia_2.STL" />
       </geometry>
     </collision>
   </link>
@@ -722,7 +722,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_lefttibia_3.STL" />
+          filename="/urdf/meshes/fix_lefttibia_3.STL" />
       </geometry>
       <material
         name="">
@@ -736,7 +736,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_lefttibia_3.STL" />
+          filename="/urdf/meshes/fix_lefttibia_3.STL" />
       </geometry>
     </collision>
   </link>
@@ -775,7 +775,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_lefttibia_4.STL" />
+          filename="/urdf/meshes/fix_lefttibia_4.STL" />
       </geometry>
       <material
         name="">
@@ -789,7 +789,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_lefttibia_4.STL" />
+          filename="/urdf/meshes/fix_lefttibia_4.STL" />
       </geometry>
     </collision>
   </link>
@@ -828,7 +828,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_lefttibia_5.STL" />
+          filename="/urdf/meshes/fix_lefttibia_5.STL" />
       </geometry>
       <material
         name="">
@@ -842,7 +842,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_lefttibia_5.STL" />
+          filename="/urdf/meshes/fix_lefttibia_5.STL" />
       </geometry>
     </collision>
   </link>
@@ -881,7 +881,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_lefttibia_6.STL" />
+          filename="/urdf/meshes/fix_lefttibia_6.STL" />
       </geometry>
       <material
         name="">
@@ -895,7 +895,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_lefttibia_6.STL" />
+          filename="/urdf/meshes/fix_lefttibia_6.STL" />
       </geometry>
     </collision>
   </link>
@@ -934,7 +934,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_left_femur2_3.STL" />
+          filename="/urdf/meshes/fix_left_femur2_3.STL" />
       </geometry>
       <material
         name="">
@@ -948,7 +948,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_left_femur2_3.STL" />
+          filename="/urdf/meshes/fix_left_femur2_3.STL" />
       </geometry>
     </collision>
   </link>
@@ -987,7 +987,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_femur1_3.STL" />
+          filename="/urdf/meshes/fix_femur1_3.STL" />
       </geometry>
       <material
         name="">
@@ -1001,7 +1001,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_femur1_3.STL" />
+          filename="/urdf/meshes/fix_femur1_3.STL" />
       </geometry>
     </collision>
   </link>
@@ -1040,7 +1040,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_femur1_4.STL" />
+          filename="/urdf/meshes/fix_femur1_4.STL" />
       </geometry>
       <material
         name="">
@@ -1054,7 +1054,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_femur1_4.STL" />
+          filename="/urdf/meshes/fix_femur1_4.STL" />
       </geometry>
     </collision>
   </link>
@@ -1093,7 +1093,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_lefthip1motorbody.STL" />
+          filename="/urdf/meshes/fix_lefthip1motorbody.STL" />
       </geometry>
       <material
         name="">
@@ -1107,7 +1107,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_lefthip1motorbody.STL" />
+          filename="/urdf/meshes/fix_lefthip1motorbody.STL" />
       </geometry>
     </collision>
   </link>
@@ -1146,7 +1146,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_rightlegtobaselink.STL" />
+          filename="/urdf/meshes/fix_rightlegtobaselink.STL" />
       </geometry>
       <material
         name="">
@@ -1160,7 +1160,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_rightlegtobaselink.STL" />
+          filename="/urdf/meshes/fix_rightlegtobaselink.STL" />
       </geometry>
     </collision>
   </link>
@@ -1199,7 +1199,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_righthip1towaist.STL" />
+          filename="/urdf/meshes/fix_righthip1towaist.STL" />
       </geometry>
       <material
         name="">
@@ -1213,7 +1213,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_righthip1towaist.STL" />
+          filename="/urdf/meshes/fix_righthip1towaist.STL" />
       </geometry>
     </collision>
   </link>
@@ -1252,7 +1252,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/revolute_rightfemer1_1.STL" />
+          filename="/urdf/meshes/revolute_rightfemer1_1.STL" />
       </geometry>
       <material
         name="">
@@ -1266,7 +1266,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/revolute_rightfemer1_1.STL" />
+          filename="/urdf/meshes/revolute_rightfemer1_1.STL" />
       </geometry>
     </collision>
   </link>
@@ -1310,7 +1310,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_right_femer1_2.STL" />
+          filename="/urdf/meshes/fix_right_femer1_2.STL" />
       </geometry>
       <material
         name="">
@@ -1324,7 +1324,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_right_femer1_2.STL" />
+          filename="/urdf/meshes/fix_right_femer1_2.STL" />
       </geometry>
     </collision>
   </link>
@@ -1363,7 +1363,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/revolute_right_femur2_1.STL" />
+          filename="/urdf/meshes/revolute_right_femur2_1.STL" />
       </geometry>
       <material
         name="">
@@ -1377,7 +1377,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/revolute_right_femur2_1.STL" />
+          filename="/urdf/meshes/revolute_right_femur2_1.STL" />
       </geometry>
     </collision>
   </link>
@@ -1421,7 +1421,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_right_femur2_2.STL" />
+          filename="/urdf/meshes/fix_right_femur2_2.STL" />
       </geometry>
       <material
         name="">
@@ -1435,7 +1435,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_right_femur2_2.STL" />
+          filename="/urdf/meshes/fix_right_femur2_2.STL" />
       </geometry>
     </collision>
   </link>
@@ -1474,7 +1474,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/revolute_right_knee.STL" />
+          filename="/urdf/meshes/revolute_right_knee.STL" />
       </geometry>
       <material
         name="">
@@ -1488,7 +1488,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/revolute_right_knee.STL" />
+          filename="/urdf/meshes/revolute_right_knee.STL" />
       </geometry>
     </collision>
   </link>
@@ -1532,7 +1532,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_righttibia_1.STL" />
+          filename="/urdf/meshes/fix_righttibia_1.STL" />
       </geometry>
       <material
         name="">
@@ -1546,7 +1546,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_righttibia_1.STL" />
+          filename="/urdf/meshes/fix_righttibia_1.STL" />
       </geometry>
     </collision>
   </link>
@@ -1585,7 +1585,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/revolute_rightfoot.STL" />
+          filename="/urdf/meshes/revolute_rightfoot.STL" />
       </geometry>
       <material
         name="">
@@ -1599,7 +1599,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/revolute_rightfoot.STL" />
+          filename="/urdf/meshes/revolute_rightfoot.STL" />
       </geometry>
     </collision>
   </link>
@@ -1643,7 +1643,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fixed_right_sensor_motor.STL" />
+          filename="/urdf/meshes/fixed_right_sensor_motor.STL" />
       </geometry>
       <material
         name="">
@@ -1657,7 +1657,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fixed_right_sensor_motor.STL" />
+          filename="/urdf/meshes/fixed_right_sensor_motor.STL" />
       </geometry>
     </collision>
   </link>
@@ -1696,7 +1696,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/revolute_right_sensorstick.STL" />
+          filename="/urdf/meshes/revolute_right_sensorstick.STL" />
       </geometry>
       <material
         name="">
@@ -1710,7 +1710,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/revolute_right_sensorstick.STL" />
+          filename="/urdf/meshes/revolute_right_sensorstick.STL" />
       </geometry>
     </collision>
   </link>
@@ -1754,7 +1754,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_righttibia_2.STL" />
+          filename="/urdf/meshes/fix_righttibia_2.STL" />
       </geometry>
       <material
         name="">
@@ -1768,7 +1768,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_righttibia_2.STL" />
+          filename="/urdf/meshes/fix_righttibia_2.STL" />
       </geometry>
     </collision>
   </link>
@@ -1807,7 +1807,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_righttibia_3.STL" />
+          filename="/urdf/meshes/fix_righttibia_3.STL" />
       </geometry>
       <material
         name="">
@@ -1821,7 +1821,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_righttibia_3.STL" />
+          filename="/urdf/meshes/fix_righttibia_3.STL" />
       </geometry>
     </collision>
   </link>
@@ -1860,7 +1860,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_righttibia_4.STL" />
+          filename="/urdf/meshes/fix_righttibia_4.STL" />
       </geometry>
       <material
         name="">
@@ -1874,7 +1874,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_righttibia_4.STL" />
+          filename="/urdf/meshes/fix_righttibia_4.STL" />
       </geometry>
     </collision>
   </link>
@@ -1913,7 +1913,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_righttibia_5.STL" />
+          filename="/urdf/meshes/fix_righttibia_5.STL" />
       </geometry>
       <material
         name="">
@@ -1927,7 +1927,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_righttibia_5.STL" />
+          filename="/urdf/meshes/fix_righttibia_5.STL" />
       </geometry>
     </collision>
   </link>
@@ -1966,7 +1966,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_righttibia_6.STL" />
+          filename="/urdf/meshes/fix_righttibia_6.STL" />
       </geometry>
       <material
         name="">
@@ -1980,7 +1980,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_righttibia_6.STL" />
+          filename="/urdf/meshes/fix_righttibia_6.STL" />
       </geometry>
     </collision>
   </link>
@@ -2019,7 +2019,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_right_femur2_3.STL" />
+          filename="/urdf/meshes/fix_right_femur2_3.STL" />
       </geometry>
       <material
         name="">
@@ -2033,7 +2033,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_right_femur2_3.STL" />
+          filename="/urdf/meshes/fix_right_femur2_3.STL" />
       </geometry>
     </collision>
   </link>
@@ -2072,7 +2072,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_rightfemer1_3.STL" />
+          filename="/urdf/meshes/fix_rightfemer1_3.STL" />
       </geometry>
       <material
         name="">
@@ -2086,7 +2086,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_rightfemer1_3.STL" />
+          filename="/urdf/meshes/fix_rightfemer1_3.STL" />
       </geometry>
     </collision>
   </link>
@@ -2125,7 +2125,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_rightfemer1_4.STL" />
+          filename="/urdf/meshes/fix_rightfemer1_4.STL" />
       </geometry>
       <material
         name="">
@@ -2139,7 +2139,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_rightfemer1_4.STL" />
+          filename="/urdf/meshes/fix_rightfemer1_4.STL" />
       </geometry>
     </collision>
   </link>
@@ -2178,7 +2178,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_right_hip1motorbody.STL" />
+          filename="/urdf/meshes/fix_right_hip1motorbody.STL" />
       </geometry>
       <material
         name="">
@@ -2192,7 +2192,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_right_hip1motorbody.STL" />
+          filename="/urdf/meshes/fix_right_hip1motorbody.STL" />
       </geometry>
     </collision>
   </link>
@@ -2231,7 +2231,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_torsotobaselink1.STL" />
+          filename="/urdf/meshes/fix_torsotobaselink1.STL" />
       </geometry>
       <material
         name="">
@@ -2245,7 +2245,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_torsotobaselink1.STL" />
+          filename="/urdf/meshes/fix_torsotobaselink1.STL" />
       </geometry>
     </collision>
   </link>
@@ -2284,7 +2284,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/servo1.STL" />
+          filename="/urdf/meshes/servo1.STL" />
       </geometry>
       <material
         name="">
@@ -2298,7 +2298,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/servo1.STL" />
+          filename="/urdf/meshes/servo1.STL" />
       </geometry>
     </collision>
   </link>
@@ -2342,7 +2342,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_torsolink1.STL" />
+          filename="/urdf/meshes/fix_torsolink1.STL" />
       </geometry>
       <material
         name="">
@@ -2356,7 +2356,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_torsolink1.STL" />
+          filename="/urdf/meshes/fix_torsolink1.STL" />
       </geometry>
     </collision>
   </link>
@@ -2395,7 +2395,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_torsolink2.STL" />
+          filename="/urdf/meshes/fix_torsolink2.STL" />
       </geometry>
       <material
         name="">
@@ -2409,7 +2409,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_torsolink2.STL" />
+          filename="/urdf/meshes/fix_torsolink2.STL" />
       </geometry>
     </collision>
   </link>
@@ -2448,7 +2448,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_torsolink3.STL" />
+          filename="/urdf/meshes/fix_torsolink3.STL" />
       </geometry>
       <material
         name="">
@@ -2462,7 +2462,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_torsolink3.STL" />
+          filename="/urdf/meshes/fix_torsolink3.STL" />
       </geometry>
     </collision>
   </link>
@@ -2501,7 +2501,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_torsoweight.STL" />
+          filename="/urdf/meshes/fix_torsoweight.STL" />
       </geometry>
       <material
         name="">
@@ -2515,7 +2515,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_torsoweight.STL" />
+          filename="/urdf/meshes/fix_torsoweight.STL" />
       </geometry>
     </collision>
   </link>
@@ -2554,7 +2554,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_torsotobaselink2.STL" />
+          filename="/urdf/meshes/fix_torsotobaselink2.STL" />
       </geometry>
       <material
         name="">
@@ -2568,7 +2568,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_torsotobaselink2.STL" />
+          filename="/urdf/meshes/fix_torsotobaselink2.STL" />
       </geometry>
     </collision>
   </link>
@@ -2607,7 +2607,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_cfpipe1tobaselink.STL" />
+          filename="/urdf/meshes/fix_cfpipe1tobaselink.STL" />
       </geometry>
       <material
         name="">
@@ -2621,7 +2621,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_cfpipe1tobaselink.STL" />
+          filename="/urdf/meshes/fix_cfpipe1tobaselink.STL" />
       </geometry>
     </collision>
   </link>
@@ -2660,7 +2660,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_cfpipe2tobaselink.STL" />
+          filename="/urdf/meshes/fix_cfpipe2tobaselink.STL" />
       </geometry>
       <material
         name="">
@@ -2674,7 +2674,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="/home/samaksh/biped_dev/RLstuff/Biped_RL/urdf/meshes/fix_cfpipe2tobaselink.STL" />
+          filename="/urdf/meshes/fix_cfpipe2tobaselink.STL" />
       </geometry>
     </collision>
   </link>
