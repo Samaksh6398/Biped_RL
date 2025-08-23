@@ -7,9 +7,9 @@ channels:
 dependencies:
   - python=3.10
   - pip
-  - pytorch=2.5
-  - torchvision
-  - torchaudio
+  - pytorch=2.1.0
+  - torchvision=0.16.0
+  - torchaudio=2.1.0
   - pytorch-cuda=11.8
   - numpy
   - scipy
@@ -22,11 +22,10 @@ dependencies:
       # Genesis engine from GitHub (latest version)
       - git+https://github.com/Genesis-Embodied-AI/Genesis.git
 
-      # AI/ML
-      - stable-baselines3==2.7.0
-      - sb3-contrib==2.7.0
+      # RL Libraries
+      - stable-baselines3==2.1.0
+      - sb3-contrib==2.1.0
       - gymnasium==1.2.0
-      - farama-notifications==0.0.4
 
       # Visualization & Plotting
       - seaborn
@@ -42,57 +41,24 @@ dependencies:
 
       # 3D Geometry
       - trimesh
-      - pymeshlab
-      - libigl
-      - pygel3d
       - pyvista
-      - tetgen
-      - rtree
-      - ompl
-      - vtk
-      - scooby
 
       # Physics Simulation
       - mujoco
 
-      # File Formats
-      - pycollada
-      - pygltflib
-      - usd-core
-      - openexr
-      - coacd
-
-      # Graphics & GUI
-      - pyopengl
-      - glfw
+      # Graphics (headless safe)
       - pyglet
-      - freetype-py
+      - glfw
 
-      # HPC & Performance
+      # Performance
       - numba
       - llvmlite
-      - taichi
 
       # Experiment Tracking
       - wandb
       - tensorboard
-      - tensorboard-data-server
-      - sentry-sdk
 
       # Utilities
       - tqdm
       - click
       - colorama
-      - packaging
-      - platformdirs
-      - six
-      - decorator
-      - wrapt
-      - typing-inspect
-      - zipp
-
-      # Development
-      - black
-      - flake8
-      - isort
-      - pytest
